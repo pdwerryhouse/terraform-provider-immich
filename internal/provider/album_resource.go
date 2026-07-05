@@ -6,6 +6,7 @@ import (
 	"terraform-provider-immich/internal/client"
 	"time"
 
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -14,8 +15,9 @@ import (
 )
 
 var (
-	_ resource.Resource              = &albumResource{}
-	_ resource.ResourceWithConfigure = &albumResource{}
+	_ resource.Resource                = &albumResource{}
+	_ resource.ResourceWithConfigure   = &albumResource{}
+	_ resource.ResourceWithImportState = &albumResource{}
 )
 
 func NewAlbumResource() resource.Resource {
@@ -181,4 +183,9 @@ func (r *albumResource) Configure(_ context.Context, req resource.ConfigureReque
 	}
 
 	r.client = client
+}
+
+func (r *albumResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	// Retrieve import ID and save to id attribute
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
