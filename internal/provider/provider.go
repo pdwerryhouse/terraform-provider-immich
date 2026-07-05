@@ -136,5 +136,7 @@ func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.Da
 }
 
 func (p *immichProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return nil
+	return []func() resource.Resource{
+		NewAlbumResource,
+	}
 }

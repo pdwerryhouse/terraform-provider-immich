@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -57,6 +58,12 @@ type Owner struct {
 	ProfileChangedAt string `json:"profileChangedAt"`
 }
 
+type AlbumUpdate struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"albumName"`
+	Description string `json:"description,omitempty"`
+}
+
 type Album struct {
 	ID                    string `json:"id"`
 	Name                  string `json:"albumName"`
@@ -92,4 +99,35 @@ func (c *Client) GetAlbums() ([]Album, error) {
 	}
 
 	return albums, nil
+}
+
+func (c *Client) CreateAlbum(albumName string, description string) (*Album, error) {
+
+	album := AlbumUpdate{
+		Name:        albumName,
+		Description: description,
+	}
+
+	rb, err := json.Marshal(album)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/albums", c.Endpoint), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	newAlbum := Album{}
+	err = json.Unmarshal(body, &newAlbum)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newAlbum, nil
 }
