@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -44,7 +43,7 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
-	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated {
+	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusNoContent {
 		return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
 	}
 
@@ -134,14 +133,6 @@ func (c *Client) CreateAlbum(albumName string, description string) (*Album, erro
 		return nil, err
 	}
 
-	f, err := os.OpenFile("/tmp/x.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	f.WriteString(string(rb))
-
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/albums", c.Endpoint), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
@@ -159,4 +150,45 @@ func (c *Client) CreateAlbum(albumName string, description string) (*Album, erro
 	}
 
 	return &newAlbum, nil
+}
+
+func (c *Client) UpdateAlbum(albumId string, albumName string, description string) (*Album, error) {
+
+	album := AlbumUpdate{
+		AlbumName:   albumName,
+		Description: description,
+	}
+
+	rb, err := json.Marshal(album)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	newAlbum := Album{}
+	err = json.Unmarshal(body, &newAlbum)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newAlbum, nil
+}
+
+func (c *Client) DeleteAlbum(albumId string) error {
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), nil)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.doRequest(req)
+	return err
 }
