@@ -63,7 +63,7 @@ func (d *albumsDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	for _, album := range albums {
 		albumState := albumsModel{
 			ID:                    types.StringValue(album.ID),
-			Name:                  types.StringValue(album.Name),
+			Name:                  types.StringValue(album.AlbumName),
 			AlbumThumbnailAssetId: types.StringValue(album.AlbumThumbnailAssetId),
 			Description:           types.StringValue(album.Description),
 			Shared:                types.BoolValue(album.Shared),

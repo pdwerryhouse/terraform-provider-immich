@@ -1,7 +1,6 @@
 package client
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -28,6 +27,7 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	apikey := c.ApiKey
 
 	req.Header.Set("x-api-key", apikey)
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
@@ -41,7 +41,7 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
-	if res.StatusCode != http.StatusOK {
+	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated && res.StatusCode != http.StatusNoContent {
 		return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
 	}
 
@@ -55,41 +55,4 @@ type Owner struct {
 	ProfileImagePath string `json:"profileImagePath"`
 	AvatarColor      string `json:"avatarColor"`
 	ProfileChangedAt string `json:"profileChangedAt"`
-}
-
-type Album struct {
-	ID                    string `json:"id"`
-	Name                  string `json:"albumName"`
-	AlbumThumbnailAssetId string `json:"albumThumbnailAssetId"`
-	Description           string `json:"description"`
-	Shared                bool   `json:"shared"`
-	HasSharedLink         bool   `json:"hasSharedLink"`
-	Order                 string `json:"order"`
-	IsActivityEnabled     bool   `json:"isActivityEnabled"`
-	CreatedAt             string `json:"createdAt"`
-	UpdatedAt             string `json:"updatedAt"`
-	StartDate             string `json:"startDate"`
-	EndDate               string `json:"endDate"`
-	OwnerId               string `json:"ownerId"`
-	Owner                 Owner  `json:"owner"`
-}
-
-func (c *Client) GetAlbums() ([]Album, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/albums", c.Endpoint), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	albums := []Album{}
-	err = json.Unmarshal(body, &albums)
-	if err != nil {
-		return nil, err
-	}
-
-	return albums, nil
 }
