@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"terraform-provider-immich/internal/client"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -27,6 +28,7 @@ type albumResourceModel struct {
 	ID          types.String `tfsdk:"id"`
 	AlbumName   types.String `tfsdk:"album_name"`
 	Description types.String `tfsdk:"description"`
+	LastUpdated types.String `tfsdk:"last_updated"`
 }
 
 func (r *albumResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -40,9 +42,12 @@ func (r *albumResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Computed: true,
 			},
 			"album_name": schema.StringAttribute{
-				Computed: true,
+				Required: true,
 			},
 			"description": schema.StringAttribute{
+				Optional: true,
+			},
+			"last_updated": schema.StringAttribute{
 				Computed: true,
 			},
 		},
@@ -65,9 +70,44 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		)
 		return
 	}
+
+	plan.ID = types.StringValue(album.ID)
+	plan.AlbumName = types.StringValue(album.AlbumName)
+	plan.Description = types.StringValue(album.Description)
+	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
+
+	diags = resp.State.Set(ctx, plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
-func (r *albumResource) Read(_ context.Context, _ resource.ReadRequest, resp *resource.ReadResponse) {
+func (r *albumResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state albumResourceModel
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	album, err := r.client.GetAlbum(state.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error Reading Album",
+			"Could not read Immich album ID "+state.ID.ValueString()+": "+err.Error(),
+		)
+		return
+	}
+
+	state.AlbumName = types.StringValue(album.AlbumName)
+	state.Description = types.StringValue(album.Description)
+
+	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 func (r *albumResource) Delete(_ context.Context, _ resource.DeleteRequest, resp *resource.DeleteResponse) {

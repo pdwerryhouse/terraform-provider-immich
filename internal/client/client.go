@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -29,6 +30,7 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	apikey := c.ApiKey
 
 	req.Header.Set("x-api-key", apikey)
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
@@ -42,7 +44,7 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
-	if res.StatusCode != http.StatusOK {
+	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated {
 		return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
 	}
 
@@ -60,13 +62,13 @@ type Owner struct {
 
 type AlbumUpdate struct {
 	ID          string `json:"id,omitempty"`
-	Name        string `json:"albumName"`
+	AlbumName   string `json:"albumName"`
 	Description string `json:"description,omitempty"`
 }
 
 type Album struct {
 	ID                    string `json:"id"`
-	Name                  string `json:"albumName"`
+	AlbumName             string `json:"albumName"`
 	AlbumThumbnailAssetId string `json:"albumThumbnailAssetId"`
 	Description           string `json:"description"`
 	Shared                bool   `json:"shared"`
@@ -100,11 +102,30 @@ func (c *Client) GetAlbums() ([]Album, error) {
 
 	return albums, nil
 }
+func (c *Client) GetAlbum(albumId string) (*Album, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	album := Album{}
+	err = json.Unmarshal(body, &album)
+	if err != nil {
+		return nil, err
+	}
+
+	return &album, nil
+}
 
 func (c *Client) CreateAlbum(albumName string, description string) (*Album, error) {
 
 	album := AlbumUpdate{
-		Name:        albumName,
+		AlbumName:   albumName,
 		Description: description,
 	}
 
@@ -112,6 +133,14 @@ func (c *Client) CreateAlbum(albumName string, description string) (*Album, erro
 	if err != nil {
 		return nil, err
 	}
+
+	f, err := os.OpenFile("/tmp/x.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	f.WriteString(string(rb))
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/albums", c.Endpoint), strings.NewReader(string(rb)))
 	if err != nil {
