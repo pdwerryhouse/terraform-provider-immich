@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-type AlbumActivityUpdate struct {
-	IsActivityEnabled bool `json:"isActivityEnabled"`
+type AlbumOrderUpdate struct {
+	Order string `json:"order"`
 }
 
-func (c *Client) UpdateAlbumActivity(albumId string, album AlbumActivityUpdate) (*Album, error) {
+func (c *Client) UpdateAlbumOrder(albumId string, album AlbumOrderUpdate) (*Album, error) {
 
 	rb, err := json.Marshal(album)
 	if err != nil {

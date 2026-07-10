@@ -1,6 +1,3 @@
-// Copyright IBM Corp. 2021, 2026
-// SPDX-License-Identifier: MPL-2.0
-
 package provider
 
 import (
@@ -36,6 +33,7 @@ type albumActivityResourceModel struct {
 func (r *albumActivityResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_album_activity"
 }
+
 func (r *albumActivityResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
