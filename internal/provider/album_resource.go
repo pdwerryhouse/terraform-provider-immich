@@ -1,3 +1,6 @@
+// Copyright IBM Corp. 2021, 2026
+// SPDX-License-Identifier: MPL-2.0
+
 package provider
 
 import (
@@ -69,7 +72,12 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	album, err := r.client.CreateAlbum(plan.AlbumName.ValueString(), plan.Description.ValueString())
+	album := client.AlbumUpdate{
+		AlbumName:   plan.AlbumName.ValueString(),
+		Description: plan.Description.ValueString(),
+	}
+
+	newAlbum, err := r.client.CreateAlbum(album)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error creating album",
@@ -78,9 +86,9 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	plan.ID = types.StringValue(album.ID)
-	plan.AlbumName = types.StringValue(album.AlbumName)
-	plan.Description = types.StringValue(album.Description)
+	plan.ID = types.StringValue(newAlbum.ID)
+	plan.AlbumName = types.StringValue(newAlbum.AlbumName)
+	plan.Description = types.StringValue(newAlbum.Description)
 	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)
@@ -125,7 +133,12 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	album, err := r.client.UpdateAlbum(plan.ID.ValueString(), plan.AlbumName.ValueString(), plan.Description.ValueString())
+	album := client.AlbumUpdate{
+		AlbumName:   plan.AlbumName.ValueString(),
+		Description: plan.Description.ValueString(),
+	}
+
+	updatedAlbum, err := r.client.UpdateAlbum(plan.ID.ValueString(), album)
 
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -135,9 +148,9 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	plan.ID = types.StringValue(album.ID)
-	plan.AlbumName = types.StringValue(album.AlbumName)
-	plan.Description = types.StringValue(album.Description)
+	plan.ID = types.StringValue(updatedAlbum.ID)
+	plan.AlbumName = types.StringValue(updatedAlbum.AlbumName)
+	plan.Description = types.StringValue(updatedAlbum.Description)
 	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)
@@ -155,7 +168,6 @@ func (r *albumResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		return
 	}
 
-	// Delete existing order
 	err := r.client.DeleteAlbum(state.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -186,6 +198,5 @@ func (r *albumResource) Configure(_ context.Context, req resource.ConfigureReque
 }
 
 func (r *albumResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	// Retrieve import ID and save to id attribute
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

@@ -1,3 +1,6 @@
+// Copyright IBM Corp. 2021, 2026
+// SPDX-License-Identifier: MPL-2.0
+
 package client
 
 import (
@@ -8,8 +11,7 @@ import (
 )
 
 type AlbumUpdate struct {
-	ID          string `json:"id,omitempty"`
-	AlbumName   string `json:"albumName"`
+	AlbumName   string `json:"albumName,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -49,6 +51,7 @@ func (c *Client) GetAlbums() ([]Album, error) {
 
 	return albums, nil
 }
+
 func (c *Client) GetAlbum(albumId string) (*Album, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), nil)
 	if err != nil {
@@ -69,12 +72,7 @@ func (c *Client) GetAlbum(albumId string) (*Album, error) {
 	return &album, nil
 }
 
-func (c *Client) CreateAlbum(albumName string, description string) (*Album, error) {
-
-	album := AlbumUpdate{
-		AlbumName:   albumName,
-		Description: description,
-	}
+func (c *Client) CreateAlbum(album AlbumUpdate) (*Album, error) {
 
 	rb, err := json.Marshal(album)
 	if err != nil {
@@ -100,12 +98,7 @@ func (c *Client) CreateAlbum(albumName string, description string) (*Album, erro
 	return &newAlbum, nil
 }
 
-func (c *Client) UpdateAlbum(albumId string, albumName string, description string) (*Album, error) {
-
-	album := AlbumUpdate{
-		AlbumName:   albumName,
-		Description: description,
-	}
+func (c *Client) UpdateAlbum(albumId string, album AlbumUpdate) (*Album, error) {
 
 	rb, err := json.Marshal(album)
 	if err != nil {

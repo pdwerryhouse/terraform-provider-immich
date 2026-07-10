@@ -1,3 +1,6 @@
+// Copyright IBM Corp. 2021, 2026
+// SPDX-License-Identifier: MPL-2.0
+
 package provider
 
 import (
@@ -19,8 +22,8 @@ var (
 )
 
 type immichProviderModel struct {
-	Host   types.String `tfsdk:"host"`
-	ApiKey types.String `tfsdk:"apikey"`
+	Endpoint types.String `tfsdk:"endpoint"`
+	ApiKey   types.String `tfsdk:"apikey"`
 }
 
 func New(version string) func() provider.Provider {
@@ -42,13 +45,16 @@ func (p *immichProvider) Metadata(_ context.Context, _ provider.MetadataRequest,
 
 func (p *immichProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Terraform provider for Immich",
 		Attributes: map[string]schema.Attribute{
-			"host": schema.StringAttribute{
-				Optional: true,
+			"endpoint": schema.StringAttribute{
+				Description: "The Immich API Endpoint. May also be provided via IMMICH_ENDPOINT.",
+				Optional:    true,
 			},
 			"apikey": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				Description: "The Immich API Key. May also be provided via IMMICH_APIKEY.",
+				Optional:    true,
+				Sensitive:   true,
 			},
 		},
 	}
@@ -63,7 +69,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	}
 
 	// XXX improve error messages
-	if config.Host.IsUnknown() {
+	if config.Endpoint.IsUnknown() {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("host"),
 			"Unknown Immich host",
@@ -83,11 +89,11 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		return
 	}
 
-	host := os.Getenv("IMMICH_HOST")
+	endpoint := os.Getenv("IMMICH_ENDPOINT")
 	apikey := os.Getenv("IMMICH_APIKEY")
 
-	if !config.Host.IsNull() {
-		host = config.Host.ValueString()
+	if !config.Endpoint.IsNull() {
+		endpoint = config.Endpoint.ValueString()
 	}
 
 	if !config.ApiKey.IsNull() {
@@ -95,11 +101,11 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	}
 
 	// XXX improve these
-	if host == "" {
+	if endpoint == "" {
 		resp.Diagnostics.AddAttributeError(
-			path.Root("host"),
-			"Unknown Immich host",
-			"The Immich host is unknown 2",
+			path.Root("endpoint"),
+			"Unknown Immich endpoint",
+			"The Immich endpoint is unknown 2",
 		)
 	}
 
@@ -115,7 +121,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		return
 	}
 
-	c, err := client.NewClient(&host, &apikey)
+	c, err := client.NewClient(&endpoint, &apikey)
 
 	// XXX improve this
 	if err != nil {
@@ -132,11 +138,14 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewAlbumsDataSource,
+		NewUsersDataSource,
 	}
 }
 
 func (p *immichProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewAlbumResource,
+		NewAlbumActivityResource,
+		NewUserResource,
 	}
 }
