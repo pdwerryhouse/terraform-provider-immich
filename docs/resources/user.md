@@ -23,6 +23,7 @@ Create an Immich user.
 
 ### Optional
 
+- `avatar_color` (String) The user's avatar colour. Valid choices: primary, pink, red, yellow, blue, green, purple, orange, gray, amber.
 - `is_admin` (Boolean) Set to true if this is an user with admin privileges.
 - `notify` (Boolean) Set to true if this is an user should be sent a notification email.
 - `pincode` (String) The user's pin code.

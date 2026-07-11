@@ -1,12 +1,28 @@
-// Copyright IBM Corp. 2021, 2026
-// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Paul Dwerryhouse <paul@dwerryhouse.com.au>
+//
+// This file is part of terraform-provider-immich.
+//
+// terraform-provider-immich is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// terraform-provider-immich is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with terraform-provider-immich.  If not, see <https://www.gnu.org/licenses/>.
 
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -58,4 +74,30 @@ type Owner struct {
 	ProfileImagePath string `json:"profileImagePath"`
 	AvatarColor      string `json:"avatarColor"`
 	ProfileChangedAt string `json:"profileChangedAt"`
+}
+
+func patch[T any](c *Client, id string, path string, item any) (*T, error) {
+
+	rb, err := json.Marshal(item)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s/%s/%s", c.Endpoint, path, id), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var newItem T
+	err = json.Unmarshal(body, &newItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newItem, nil
 }

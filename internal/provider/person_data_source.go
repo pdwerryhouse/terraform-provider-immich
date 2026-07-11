@@ -20,71 +20,68 @@ package provider
 import (
 	"context"
 	"fmt"
+	"terraform-provider-immich/internal/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"terraform-provider-immich/internal/client"
 )
 
 var (
-	_ datasource.DataSource              = &usersDataSource{}
-	_ datasource.DataSourceWithConfigure = &usersDataSource{}
+	_ datasource.DataSource              = &peopleDataSource{}
+	_ datasource.DataSourceWithConfigure = &peopleDataSource{}
 )
 
-func NewUsersDataSource() datasource.DataSource {
-	return &usersDataSource{}
+func NewPeopleDataSource() datasource.DataSource {
+	return &peopleDataSource{}
 }
 
-type usersDataSource struct {
+type peopleDataSource struct {
 	client *client.Client
 }
 
-type usersDataSourceModel struct {
-	User []usersModel `tfsdk:"users"`
+type peopleDataSourceModel struct {
+	User []peopleModel `tfsdk:"people"`
 }
 
-type usersModel struct {
-	ID        types.String `tfsdk:"id"`
-	Name      types.String `tfsdk:"name"`
-	Email     types.String `tfsdk:"email"`
-	IsAdmin   types.Bool   `tfsdk:"is_admin"`
-	Status    types.String `tfsdk:"status"`
-	CreatedAt types.String `tfsdk:"created_at"`
-	UpdatedAt types.String `tfsdk:"updated_at"`
-	DeletedAt types.String `tfsdk:"deleted_at"`
+type peopleModel struct {
+	ID            types.String `tfsdk:"id"`
+	Name          types.String `tfsdk:"name"`
+	BirthDate     types.String `tfsdk:"birthdate"`
+	ThumbNailPath types.String `tfsdk:"thumbnail_path"`
+	IsHidden      types.Bool   `tfsdk:"is_hidden"`
+	IsFavorite    types.Bool   `tfsdk:"is_favorite"`
+	UpdatedAt     types.String `tfsdk:"updated_at"`
 }
 
-func (d *usersDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_users"
+func (d *peopleDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_people"
 }
 
-func (d *usersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var state usersDataSourceModel
+func (d *peopleDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var state peopleDataSourceModel
 
-	users, err := d.client.GetUsers()
+	people, err := d.client.GetPeople()
 	if err != nil {
 		resp.Diagnostics.AddError(
-			"Unable to Read Immich User",
+			"Unable to Read Immich Person",
 			err.Error(),
 		)
 		return
 	}
 
-	for _, user := range users {
-		userState := usersModel{
-			ID:        types.StringValue(user.ID),
-			Name:      types.StringValue(user.Name),
-			Email:     types.StringValue(user.Email),
-			Status:    types.StringValue(user.Status),
-			IsAdmin:   types.BoolValue(user.IsAdmin),
-			CreatedAt: types.StringValue(user.CreatedAt),
-			UpdatedAt: types.StringValue(user.UpdatedAt),
-			DeletedAt: types.StringValue(user.DeletedAt),
+	for _, person := range people {
+		peopletate := peopleModel{
+			ID:            types.StringValue(person.ID),
+			Name:          types.StringValue(person.Name),
+			BirthDate:     types.StringValue(person.BirthDate),
+			ThumbNailPath: types.StringValue(person.ThumbNailPath),
+			IsHidden:      types.BoolValue(person.IsHidden),
+			IsFavorite:    types.BoolValue(person.IsFavorite),
+			UpdatedAt:     types.StringValue(person.UpdatedAt),
 		}
 
-		state.User = append(state.User, userState)
+		state.User = append(state.User, peopletate)
 	}
 
 	diags := resp.State.Set(ctx, &state)
@@ -94,7 +91,7 @@ func (d *usersDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 	}
 }
 
-func (d *usersDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *peopleDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 
 	if req.ProviderData == nil {
 		return
@@ -113,10 +110,10 @@ func (d *usersDataSource) Configure(_ context.Context, req datasource.ConfigureR
 	d.client = client
 }
 
-func (d *usersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *peopleDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
-			"users": schema.ListNestedAttribute{
+			"people": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -126,22 +123,19 @@ func (d *usersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"email": schema.StringAttribute{
+						"birthdate": schema.StringAttribute{
 							Computed: true,
 						},
-						"is_admin": schema.BoolAttribute{
+						"is_hidden": schema.BoolAttribute{
 							Computed: true,
 						},
-						"status": schema.StringAttribute{
-							Computed: true,
-						},
-						"created_at": schema.StringAttribute{
+						"is_favorite": schema.BoolAttribute{
 							Computed: true,
 						},
 						"updated_at": schema.StringAttribute{
 							Computed: true,
 						},
-						"deleted_at": schema.StringAttribute{
+						"thumbnail_path": schema.StringAttribute{
 							Computed: true,
 						},
 					},

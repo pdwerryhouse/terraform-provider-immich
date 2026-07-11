@@ -1,5 +1,16 @@
-// Copyright IBM Corp. 2021, 2026
-// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Paul Dwerryhouse <paul@dwerryhouse.com.au>
+//
+// This file is part of terraform-provider-immich.
+//
+// terraform-provider-immich is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// terraform-provider-immich is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 
 package client
 
@@ -15,14 +26,24 @@ type UserDelete struct {
 }
 
 type User struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	IsAdmin   bool   `json:"isAdmin"`
-	Status    string `json:"status"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-	DeletedAt string `json:"deletedAt"`
+	ID                   string `json:"id"`
+	Name                 string `json:"name"`
+	Email                string `json:"email"`
+	IsAdmin              bool   `json:"isAdmin"`
+	Status               string `json:"status"`
+	Notify               bool   `json:"notify"`
+	QuotaSizeInBytes     int64  `json:"quotaSizeInBytes"`
+	ShouldChangePassword bool   `json:"shouldChangePassword"`
+	StorageLabel         string `json:"storageLabel"`
+	PinCode              string `json:"pinCode"`
+	AvatarColor          string `json:"avatarColor"`
+	OauthId              string `json:"oauthId"`
+	ProfileChangedAt     string `json:"profileChangedAt"`
+	ProfileImagePath     string `json:"profileImagePath"`
+	QuotaUsageInBytes    int64  `json:"quotaUsageInBytes"`
+	CreatedAt            string `json:"createdAt"`
+	UpdatedAt            string `json:"updatedAt"`
+	DeletedAt            string `json:"deletedAt"`
 }
 
 type UserUpdate struct {
@@ -35,6 +56,7 @@ type UserUpdate struct {
 	ShouldChangePassword bool   `json:"shouldChangePassword,omitempty"`
 	StorageLabel         string `json:"storageLabel,omitempty"`
 	PinCode              string `json:"pinCode,omitempty"`
+	AvatarColor          string `json:"avatarColor,omitempty"`
 }
 
 func (c *Client) GetUsers() ([]User, error) {
@@ -106,31 +128,11 @@ func (c *Client) CreateUser(user UserUpdate) (*User, error) {
 	return &newUser, nil
 }
 
-func (c *Client) UpdateUser(ID string, user UserUpdate) (*User, error) {
+func (c *Client) UpdateUser(userId string, user UserUpdate) (*User, error) {
 
-	rb, err := json.Marshal(user)
-	if err != nil {
-		return nil, err
-	}
+	newUser, err := patch[User](c, userId, "admin/users", user)
 
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/admin/users/%s", c.Endpoint, ID), strings.NewReader(string(rb)))
-
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	updatedUser := User{}
-	err = json.Unmarshal(body, &updatedUser)
-	if err != nil {
-		return nil, err
-	}
-
-	return &updatedUser, nil
+	return newUser, err
 }
 
 func (c *Client) DeleteUser(ID string) error {

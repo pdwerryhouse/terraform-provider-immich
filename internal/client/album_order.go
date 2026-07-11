@@ -1,38 +1,28 @@
-package client
+// Copyright (C) 2026 Paul Dwerryhouse <paul@dwerryhouse.com.au>
+//
+// This file is part of terraform-provider-immich.
+//
+// terraform-provider-immich is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// terraform-provider-immich is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with terraform-provider-immich.  If not, see <https://www.gnu.org/licenses/>.
 
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strings"
-)
+package client
 
 type AlbumOrderUpdate struct {
 	Order string `json:"order"`
 }
 
 func (c *Client) UpdateAlbumOrder(albumId string, album AlbumOrderUpdate) (*Album, error) {
+	newAlbum, err := patch[Album](c, albumId, "albums", album)
 
-	rb, err := json.Marshal(album)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), strings.NewReader(string(rb)))
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	newAlbum := Album{}
-	err = json.Unmarshal(body, &newAlbum)
-	if err != nil {
-		return nil, err
-	}
-
-	return &newAlbum, nil
+	return newAlbum, err
 }

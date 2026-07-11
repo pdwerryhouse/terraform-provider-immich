@@ -1,18 +1,35 @@
-// Copyright IBM Corp. 2021, 2026
-// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Paul Dwerryhouse <paul@dwerryhouse.com.au>
+//
+// This file is part of terraform-provider-immich.
+//
+// terraform-provider-immich is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// terraform-provider-immich is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with terraform-provider-immich.  If not, see <https://www.gnu.org/licenses/>.
 
 package provider
 
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"terraform-provider-immich/internal/client"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -41,6 +58,7 @@ type userResourceModel struct {
 	QuotaSizeInBytes     types.Int64  `tfsdk:"quota_size_in_bytes"`
 	ShouldChangePassword types.Bool   `tfsdk:"should_change_password"`
 	StorageLabel         types.String `tfsdk:"storage_label"`
+	AvatarColor          types.String `tfsdk:"avatar_color"`
 	//LastUpdated types.String `tfsdk:"last_updated"`
 }
 
@@ -94,6 +112,17 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "The user's pin code.",
 				Optional:    true,
 			},
+			"avatar_color": schema.StringAttribute{
+				Description: "The user's avatar colour. Valid choices: primary, pink, red, yellow, blue, green, purple, orange, gray, amber.",
+				Optional:    true,
+				Validators: []validator.String{
+					// These are example validators from terraform-plugin-framework-validators
+					stringvalidator.RegexMatches(
+						regexp.MustCompile(`^(primary|pink|red|yellow|blue|green|purple|orange|gray|amber)$`),
+						"must be 'primary', 'pink', 'red', 'yellow', 'blue', 'green', 'purple, 'orange', 'gray', 'amber'.",
+					),
+				},
+			},
 			/*
 				"last_updated": schema.StringAttribute{
 					Computed: true,
@@ -122,6 +151,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		StorageLabel:         plan.StorageLabel.ValueString(),
 		ShouldChangePassword: plan.ShouldChangePassword.ValueBool(),
 		PinCode:              plan.PinCode.ValueString(),
+		AvatarColor:          plan.AvatarColor.ValueString(),
 	}
 
 	newUser, err := r.client.CreateUser(user)
@@ -190,6 +220,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		StorageLabel:         plan.StorageLabel.ValueString(),
 		ShouldChangePassword: plan.ShouldChangePassword.ValueBool(),
 		PinCode:              plan.PinCode.ValueString(),
+		AvatarColor:          plan.AvatarColor.ValueString(),
 	}
 
 	updatedUser, err := r.client.UpdateUser(plan.ID.ValueString(), user)
