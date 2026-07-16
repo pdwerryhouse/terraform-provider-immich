@@ -76,6 +76,75 @@ type Owner struct {
 	ProfileChangedAt string `json:"profileChangedAt"`
 }
 
+func get[T any](c *Client, path string) (*T, error) {
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", c.Endpoint, path), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var item T
+	err = json.Unmarshal(body, &item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
+
+}
+
+func get_by_id[T any](c *Client, id string, path string) (*T, error) {
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/%s", c.Endpoint, path, id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var item T
+	err = json.Unmarshal(body, &item)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
+
+}
+
+func post[T any](c *Client, path string, item any) (*T, error) {
+	rb, err := json.Marshal(item)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", c.Endpoint, path), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var newItem T
+	err = json.Unmarshal(body, &newItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newItem, nil
+}
+
 func patch[T any](c *Client, id string, path string, item any) (*T, error) {
 
 	rb, err := json.Marshal(item)
@@ -84,6 +153,32 @@ func patch[T any](c *Client, id string, path string, item any) (*T, error) {
 	}
 
 	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s/%s/%s", c.Endpoint, path, id), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var newItem T
+	err = json.Unmarshal(body, &newItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newItem, nil
+}
+
+func put[T any](c *Client, id string, path string, item any) (*T, error) {
+
+	rb, err := json.Marshal(item)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/%s/%s", c.Endpoint, path, id), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}

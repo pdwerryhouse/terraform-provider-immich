@@ -81,55 +81,18 @@ func (c *Client) GetUsers() ([]User, error) {
 }
 
 func (c *Client) GetUser(userId string) (*User, error) {
+	user, err := get_by_id[User](c, userId, "admin/users")
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/admin/users/%s", c.Endpoint, userId), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	user := User{}
-	err = json.Unmarshal(body, &user)
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
+	return user, err
 }
 
 func (c *Client) CreateUser(user UserUpdate) (*User, error) {
+	newUser, err := post[User](c, "admin/users", user)
 
-	rb, err := json.Marshal(user)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/admin/users", c.Endpoint), strings.NewReader(string(rb)))
-
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	newUser := User{}
-	err = json.Unmarshal(body, &newUser)
-	if err != nil {
-		return nil, err
-	}
-
-	return &newUser, nil
+	return newUser, err
 }
 
 func (c *Client) UpdateUser(userId string, user UserUpdate) (*User, error) {
-
 	newUser, err := patch[User](c, userId, "admin/users", user)
 
 	return newUser, err

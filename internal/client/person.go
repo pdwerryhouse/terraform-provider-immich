@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
 type PersonUpdate struct {
@@ -72,75 +71,21 @@ func (c *Client) GetPeople() ([]Person, error) {
 }
 
 func (c *Client) GetPerson(personId string) (*Person, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/people/%s", c.Endpoint, personId), nil)
-	if err != nil {
-		return nil, err
-	}
+	person, err := get_by_id[Person](c, personId, "people")
 
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	person := Person{}
-	err = json.Unmarshal(body, &person)
-	if err != nil {
-		return nil, err
-	}
-
-	return &person, nil
+	return person, err
 }
 
 func (c *Client) CreatePerson(person PersonUpdate) (*Person, error) {
+	newPerson, err := post[Person](c, "people", person)
 
-	rb, err := json.Marshal(person)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/people", c.Endpoint), strings.NewReader(string(rb)))
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	newPerson := Person{}
-	err = json.Unmarshal(body, &newPerson)
-	if err != nil {
-		return nil, err
-	}
-
-	return &newPerson, nil
+	return newPerson, err
 }
 
 func (c *Client) UpdatePerson(personId string, person PersonUpdate) (*Person, error) {
+	newPerson, err := patch[Person](c, personId, "people", person)
 
-	rb, err := json.Marshal(person)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s/people/%s", c.Endpoint, personId), strings.NewReader(string(rb)))
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	newPerson := Person{}
-	err = json.Unmarshal(body, &newPerson)
-	if err != nil {
-		return nil, err
-	}
-
-	return &newPerson, nil
+	return newPerson, err
 }
 
 func (c *Client) DeletePerson(personId string) error {

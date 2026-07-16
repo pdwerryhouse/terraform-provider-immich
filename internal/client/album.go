@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
 type AlbumUpdate struct {
@@ -67,53 +66,18 @@ func (c *Client) GetAlbums() ([]Album, error) {
 }
 
 func (c *Client) GetAlbum(albumId string) (*Album, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/albums/%s", c.Endpoint, albumId), nil)
-	if err != nil {
-		return nil, err
-	}
+	album, err := get_by_id[Album](c, albumId, "albums")
 
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	album := Album{}
-	err = json.Unmarshal(body, &album)
-	if err != nil {
-		return nil, err
-	}
-
-	return &album, nil
+	return album, err
 }
 
 func (c *Client) CreateAlbum(album AlbumUpdate) (*Album, error) {
+	newAlbum, err := post[Album](c, "albums", album)
 
-	rb, err := json.Marshal(album)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/albums", c.Endpoint), strings.NewReader(string(rb)))
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	newAlbum := Album{}
-	err = json.Unmarshal(body, &newAlbum)
-	if err != nil {
-		return nil, err
-	}
-
-	return &newAlbum, nil
+	return newAlbum, err
 }
 
 func (c *Client) UpdateAlbum(albumId string, album AlbumUpdate) (*Album, error) {
-
 	newAlbum, err := patch[Album](c, albumId, "albums", album)
 
 	return newAlbum, err

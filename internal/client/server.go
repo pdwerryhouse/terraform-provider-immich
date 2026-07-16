@@ -17,12 +17,6 @@
 
 package client
 
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-)
-
 type ServerAbout struct {
 	Build                      string `json:"build"`
 	BuildImage                 string `json:"buildImage"`
@@ -81,65 +75,36 @@ type ServerFeatures struct {
 	Trash               bool `json:"trash"`
 }
 
+type ServerStorage struct {
+	DiskAvailable       string  `json:"diskAvailable"`
+	DiskAvailableRaw    int64   `json:"diskAvailableRaw"`
+	DiskSize            string  `json:"diskSize"`
+	DiskSizeRaw         int64   `json:"diskSizeRaw"`
+	DiskUsagePercentage float64 `json:"diskUsagePercentage"`
+	DiskUse             string  `json:"diskUse"`
+	DiskUseRaw          int64   `json:"diskUseRaw"`
+}
+
 func (c *Client) GetServerAbout() (*ServerAbout, error) {
+	ServerAbout, err := get[ServerAbout](c, "server/about")
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/server/about", c.Endpoint), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	server_about := ServerAbout{}
-	err = json.Unmarshal(body, &server_about)
-	if err != nil {
-		return nil, err
-	}
-
-	return &server_about, nil
+	return ServerAbout, err
 }
 
 func (c *Client) GetServerConfig() (*ServerConfig, error) {
+	ServerConfig, err := get[ServerConfig](c, "server/config")
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/server/config", c.Endpoint), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	server_config := ServerConfig{}
-	err = json.Unmarshal(body, &server_config)
-	if err != nil {
-		return nil, err
-	}
-
-	return &server_config, nil
+	return ServerConfig, err
 }
 
 func (c *Client) GetServerFeatures() (*ServerFeatures, error) {
+	ServerFeatures, err := get[ServerFeatures](c, "server/features")
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/server/features", c.Endpoint), nil)
-	if err != nil {
-		return nil, err
-	}
+	return ServerFeatures, err
+}
 
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
+func (c *Client) GetServerStorage() (*ServerStorage, error) {
+	ServerStorage, err := get[ServerStorage](c, "server/storage")
 
-	server_features := ServerFeatures{}
-	err = json.Unmarshal(body, &server_features)
-	if err != nil {
-		return nil, err
-	}
-
-	return &server_features, nil
+	return ServerStorage, err
 }
