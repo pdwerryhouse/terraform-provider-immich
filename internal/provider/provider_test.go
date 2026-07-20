@@ -15,43 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with terraform-provider-immich.  If not, see <https://www.gnu.org/licenses/>.
 
-package client
+package provider
 
 import (
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
-var testApiKey = "xxx"
-
-func createTestServer(t *testing.T, dataModel any) *httptest.Server {
-
-	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-
-		data, err := json.Marshal(dataModel)
-		if err != nil {
-			t.Error("Got an error when unmarshalling dataModel.\n")
-		}
-
-		rw.Write([]byte(data))
-	}))
-
-	return server
+const (
+	providerConfig = `
+provider "immich" {
 }
+`
+)
 
-func TestNewClient(t *testing.T) {
-	endpoint := "http://localhost:2283"
-
-	c, err := NewClient(&endpoint, &testApiKey)
-
-	if err != nil {
-		t.Error("Got an error when trying to create a client.\n")
+var (
+	testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
+		"immich": providerserver.NewProtocol6WithError(New("test")()),
 	}
-
-	assert.Equal(t, c.Endpoint, endpoint, "c.Endpoint and endpoint should match")
-	assert.Equal(t, c.ApiKey, testApiKey, "c.ApiKey and apikey should match")
-}
+)

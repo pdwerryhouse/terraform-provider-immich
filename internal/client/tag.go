@@ -72,7 +72,7 @@ func (c *Client) CreateTag(tag TagUpdate) (*Tag, error) {
 }
 
 func (c *Client) UpdateTag(tagId string, tag TagUpdate) (*Tag, error) {
-	newTag, err := put[Tag](c, tagId, "%/tags/%", tag)
+	newTag, err := put[Tag](c, tagId, "tags", tag)
 
 	return newTag, err
 }

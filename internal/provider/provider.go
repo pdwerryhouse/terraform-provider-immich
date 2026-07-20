@@ -66,7 +66,7 @@ func (p *immichProvider) Schema(_ context.Context, _ provider.SchemaRequest, res
 				Optional:    true,
 			},
 			"apikey": schema.StringAttribute{
-				Description: "The Immich API Key. May also be provided via IMMICH_APIKEY.",
+				Description: "The Immich API Key. May also be provided via IMMICH_API_KEY.",
 				Optional:    true,
 				Sensitive:   true,
 			},
@@ -104,7 +104,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	}
 
 	endpoint := os.Getenv("IMMICH_ENDPOINT")
-	apikey := os.Getenv("IMMICH_APIKEY")
+	apikey := os.Getenv("IMMICH_API_KEY")
 
 	if !config.Endpoint.IsNull() {
 		endpoint = config.Endpoint.ValueString()

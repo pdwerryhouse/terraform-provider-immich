@@ -46,7 +46,7 @@ type PeopleResponse struct {
 	HasNextPage bool     `json:"hasNextPage"`
 	Total       int64    `json:"total"`
 	Hidden      int64    `json:"hidden"`
-	Person      []Person `json:"people"`
+	People      []Person `json:"people"`
 }
 
 // XXX Update this to handle pages
@@ -67,7 +67,7 @@ func (c *Client) GetPeople() ([]Person, error) {
 		return nil, err
 	}
 
-	return people_response.Person, nil
+	return people_response.People, nil
 }
 
 func (c *Client) GetPerson(personId string) (*Person, error) {
