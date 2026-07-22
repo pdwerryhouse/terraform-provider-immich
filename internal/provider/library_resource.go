@@ -93,23 +93,23 @@ func (r *libraryResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	var ExclusionPatterns []string
-	diags = plan.ExclusionPatterns.ElementsAs(ctx, &ExclusionPatterns, false)
+	var exclusionPatterns []string
+	diags = plan.ExclusionPatterns.ElementsAs(ctx, &exclusionPatterns, false)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var ImportPaths []string
-	diags = plan.ImportPaths.ElementsAs(ctx, &ImportPaths, false)
+	var importPaths []string
+	diags = plan.ImportPaths.ElementsAs(ctx, &importPaths, false)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	library := client.LibraryUpdate{
-		ExclusionPatterns: ExclusionPatterns,
-		ImportPaths:       ImportPaths,
+		ExclusionPatterns: exclusionPatterns,
+		ImportPaths:       importPaths,
 		Name:              plan.Name.ValueString(),
 		OwnerId:           plan.OwnerId.ValueString(),
 	}
