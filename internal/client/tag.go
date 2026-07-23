@@ -33,6 +33,16 @@ type Tag struct {
 	Value     string `json:"value"`
 }
 
+type TagResponseDto struct {
+	Color     string `json:"color"`
+	CreatedAt string `json:"createdAt"`
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	ParentId  string `json:"parentId"`
+	UpdatedAt string `json:"updatedAt"`
+	Value     string `json:"value"`
+}
+
 type TagUpdate struct {
 	Name     string `json:"name"`
 	Color    string `json:"color,omitempty"`

@@ -23,11 +23,11 @@ import (
 	"net/http"
 )
 
-type PartnerUpdate struct {
+type PartnerCreateDto struct {
 	SharedWithId string `json:"sharedWithId"`
 }
 
-type Partner struct {
+type PartnerResponseDto struct {
 	AvatarColor      string `json:"avatarColor"`
 	Email            string `json:"email"`
 	Id               string `json:"id"`
@@ -37,7 +37,11 @@ type Partner struct {
 	ProfileImagePath string `json:"profileImagePath"`
 }
 
-func (c *Client) GetPartners() ([]Partner, error) {
+type PartnerUpdateDto struct {
+	InTimeline bool `json:"inTimeline"`
+}
+
+func (c *Client) GetPartners() ([]PartnerResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/partners", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -52,7 +56,7 @@ func (c *Client) GetPartners() ([]Partner, error) {
 		return nil, err
 	}
 
-	partners := []Partner{}
+	partners := []PartnerResponseDto{}
 	err = json.Unmarshal(body, &partners)
 	if err != nil {
 		return nil, err
@@ -61,20 +65,20 @@ func (c *Client) GetPartners() ([]Partner, error) {
 	return partners, nil
 }
 
-func (c *Client) GetPartner(partnerId string) (*Partner, error) {
-	partner, err := get_by_id[Partner](c, partnerId, "partners")
+func (c *Client) GetPartner(partnerId string) (*PartnerResponseDto, error) {
+	partner, err := get_by_id[PartnerResponseDto](c, partnerId, "partners")
 
 	return partner, err
 }
 
-func (c *Client) CreatePartner(partner PartnerUpdate) (*Partner, error) {
-	newPartner, err := post[Partner](c, "partners", partner)
+func (c *Client) CreatePartner(partner PartnerCreateDto) (*PartnerResponseDto, error) {
+	newPartner, err := post[PartnerResponseDto](c, "partners", partner)
 
 	return newPartner, err
 }
 
-func (c *Client) UpdatePartner(partnerId string, partner PartnerUpdate) (*Partner, error) {
-	newPartner, err := patch[Partner](c, partnerId, "partners", partner)
+func (c *Client) UpdatePartner(partnerId string, partner PartnerUpdateDto) (*PartnerResponseDto, error) {
+	newPartner, err := patch[PartnerResponseDto](c, partnerId, "partners", partner)
 
 	return newPartner, err
 }

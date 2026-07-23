@@ -49,6 +49,17 @@ type PeopleResponse struct {
 	People      []Person `json:"people"`
 }
 
+type PersonResponseDto struct {
+	BirthDate     string `json:"birthDate"`
+	Color         string `json:"color"`
+	Id            string `json:"id"`
+	IsFavorite    bool   `json:"isFavorite"`
+	IsHidden      bool   `json:"isHidden"`
+	Name          string `json:"name"`
+	ThumbnailPath string `json:"thumbnailPath"`
+	UpdatedAt     string `json:"updatedAt"`
+}
+
 // XXX Update this to handle pages
 func (c *Client) GetPeople() ([]Person, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/people", c.Endpoint), nil)

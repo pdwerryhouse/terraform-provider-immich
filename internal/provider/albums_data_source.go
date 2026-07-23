@@ -79,19 +79,17 @@ func (d *albumsDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
 	for _, album := range albums {
 		albumState := albumsModel{
-			ID:                    types.StringValue(album.ID),
+			ID:                    types.StringValue(album.Id),
 			Name:                  types.StringValue(album.AlbumName),
 			AlbumThumbnailAssetId: types.StringValue(album.AlbumThumbnailAssetId),
 			Description:           types.StringValue(album.Description),
 			Shared:                types.BoolValue(album.Shared),
 			HasSharedLink:         types.BoolValue(album.HasSharedLink),
-			Order:                 types.StringValue(album.Order),
 			IsActivityEnabled:     types.BoolValue(album.IsActivityEnabled),
 			CreatedAt:             types.StringValue(album.CreatedAt),
 			UpdatedAt:             types.StringValue(album.UpdatedAt),
 			StartDate:             types.StringValue(album.StartDate),
 			EndDate:               types.StringValue(album.EndDate),
-			OwnerId:               types.StringValue(album.OwnerId),
 		}
 
 		state.Album = append(state.Album, albumState)

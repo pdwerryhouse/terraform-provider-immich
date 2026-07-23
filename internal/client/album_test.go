@@ -28,26 +28,17 @@ import (
 
 func TestCreateAlbum(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		album := Album{
+		album := AlbumResponseDto{
 			AlbumName:             "Test",
 			Description:           "A Test Album",
 			AlbumThumbnailAssetId: "",
 			CreatedAt:             "2026-07-08T01:46:57.450Z",
 			UpdatedAt:             "2026-07-08T01:46:57.450Z",
-			ID:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
-			OwnerId:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-			Owner: Owner{
-				ID:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-				Email:            "test001@example.com",
-				Name:             "Test 001",
-				ProfileImagePath: "",
-				AvatarColor:      "primary",
-				ProfileChangedAt: "2026-07-02T06:11:20.062077+00:00",
-			},
-			Shared:            false,
-			HasSharedLink:     false,
-			IsActivityEnabled: true,
-			Order:             "desc",
+			Id:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
+			Shared:                false,
+			HasSharedLink:         false,
+			IsActivityEnabled:     true,
+			Order:                 "desc",
 		}
 
 		data, err := json.Marshal(album)
@@ -68,7 +59,7 @@ func TestCreateAlbum(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	album, err := c.CreateAlbum(AlbumUpdate{
+	album, err := c.CreateAlbum(CreateAlbumDto{
 		AlbumName:   "Test",
 		Description: "A Test Album",
 	})
@@ -77,7 +68,7 @@ func TestCreateAlbum(t *testing.T) {
 		t.Error("Got an error when trying to run CreateAlbum.\n")
 	}
 
-	assert.Equal(t, album.ID, "fe2217e0-b071-4e32-8440-c499d79a469b", "album.ID is incorrect")
+	assert.Equal(t, album.Id, "fe2217e0-b071-4e32-8440-c499d79a469b", "album.ID is incorrect")
 }
 
 func TestGetAlbums(t *testing.T) {
@@ -88,26 +79,17 @@ func TestGetAlbums(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetTags should use the GET method")
 
-		albums := [1]Album{{
+		albums := [1]AlbumResponseDto{{
 			AlbumName:             "Test",
 			Description:           "A Test Album",
 			AlbumThumbnailAssetId: "",
 			CreatedAt:             "2026-07-08T01:46:57.450Z",
 			UpdatedAt:             "2026-07-08T01:46:57.450Z",
-			ID:                    id,
-			OwnerId:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-			Owner: Owner{
-				ID:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-				Email:            "test001@example.com",
-				Name:             "Test 001",
-				ProfileImagePath: "",
-				AvatarColor:      "primary",
-				ProfileChangedAt: "2026-07-02T06:11:20.062077+00:00",
-			},
-			Shared:            false,
-			HasSharedLink:     false,
-			IsActivityEnabled: true,
-			Order:             "desc",
+			Id:                    id,
+			Shared:                false,
+			HasSharedLink:         false,
+			IsActivityEnabled:     true,
+			Order:                 "desc",
 		}}
 
 		data, err := json.Marshal(albums)
@@ -135,7 +117,7 @@ func TestGetAlbums(t *testing.T) {
 
 	// XXX fix this
 	for _, album := range albums {
-		assert.Equal(t, id, album.ID, "album.Id is incorrect")
+		assert.Equal(t, id, album.Id, "album.Id is incorrect")
 	}
 }
 
@@ -146,26 +128,17 @@ func TestGetAlbum(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		//equals(t, req.URL.String(), "/albums/feb9ee33-b35a-4a20-952e-04d7969d7006")
 
-		album := Album{
+		album := AlbumResponseDto{
 			AlbumName:             "Test",
 			Description:           "A Test Album",
 			AlbumThumbnailAssetId: "",
 			CreatedAt:             "2026-07-08T01:46:57.450Z",
 			UpdatedAt:             "2026-07-08T01:46:57.450Z",
-			ID:                    id,
-			OwnerId:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-			Owner: Owner{
-				ID:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-				Email:            "test001@example.com",
-				Name:             "Test 001",
-				ProfileImagePath: "",
-				AvatarColor:      "primary",
-				ProfileChangedAt: "2026-07-02T06:11:20.062077+00:00",
-			},
-			Shared:            false,
-			HasSharedLink:     false,
-			IsActivityEnabled: true,
-			Order:             "desc",
+			Id:                    id,
+			Shared:                false,
+			HasSharedLink:         false,
+			IsActivityEnabled:     true,
+			Order:                 "desc",
 		}
 
 		data, err := json.Marshal(album)
@@ -191,7 +164,7 @@ func TestGetAlbum(t *testing.T) {
 		t.Error("Got an error when trying to run GetAlbum.\n")
 	}
 
-	assert.Equal(t, id, album.ID, "album.ID is incorrect")
+	assert.Equal(t, id, album.Id, "album.ID is incorrect")
 }
 
 func TestUpdateAlbum(t *testing.T) {
@@ -204,26 +177,17 @@ func TestUpdateAlbum(t *testing.T) {
 			id := req.URL.Path[i+1:]
 		*/
 
-		album := Album{
+		album := AlbumResponseDto{
 			AlbumName:             "Test",
 			Description:           "A Test Album",
 			AlbumThumbnailAssetId: "",
 			CreatedAt:             "2026-07-08T01:46:57.450Z",
 			UpdatedAt:             "2026-07-08T01:46:57.450Z",
-			ID:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
-			OwnerId:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-			Owner: Owner{
-				ID:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-				Email:            "test001@example.com",
-				Name:             "Test 001",
-				ProfileImagePath: "",
-				AvatarColor:      "primary",
-				ProfileChangedAt: "2026-07-02T06:11:20.062077+00:00",
-			},
-			Shared:            false,
-			HasSharedLink:     false,
-			IsActivityEnabled: true,
-			Order:             "desc",
+			Id:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
+			Shared:                false,
+			HasSharedLink:         false,
+			IsActivityEnabled:     true,
+			Order:                 "desc",
 		}
 
 		data, err := json.Marshal(album)
@@ -244,7 +208,7 @@ func TestUpdateAlbum(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	album := AlbumUpdate{
+	album := UpdateAlbumDto{
 		AlbumName:   "Test",
 		Description: "A Test Album",
 	}
@@ -257,7 +221,7 @@ func TestUpdateAlbum(t *testing.T) {
 		t.Error("Got an error when trying to run UpdateAlbum.\n")
 	}
 
-	assert.Equal(t, id, newAlbum.ID, "Incorrect newAlbum.Id")
+	assert.Equal(t, id, newAlbum.Id, "Incorrect newAlbum.Id")
 }
 
 func TestDeleteAlbum(t *testing.T) {
@@ -265,26 +229,17 @@ func TestDeleteAlbum(t *testing.T) {
 
 		assert.Equal(t, req.Method, "DELETE", "DeleteAlbum should use the DELETE method")
 
-		album := Album{
+		album := AlbumResponseDto{
 			AlbumName:             "Test",
 			Description:           "A Test Album",
 			AlbumThumbnailAssetId: "",
 			CreatedAt:             "2026-07-08T01:46:57.450Z",
 			UpdatedAt:             "2026-07-08T01:46:57.450Z",
-			ID:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
-			OwnerId:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-			Owner: Owner{
-				ID:               "ebd580a9-f019-4bbc-b557-900377becfd0",
-				Email:            "test001@example.com",
-				Name:             "Test 001",
-				ProfileImagePath: "",
-				AvatarColor:      "primary",
-				ProfileChangedAt: "2026-07-02T06:11:20.062077+00:00",
-			},
-			Shared:            false,
-			HasSharedLink:     false,
-			IsActivityEnabled: true,
-			Order:             "desc",
+			Id:                    "fe2217e0-b071-4e32-8440-c499d79a469b",
+			Shared:                false,
+			HasSharedLink:         false,
+			IsActivityEnabled:     true,
+			Order:                 "desc",
 		}
 
 		data, err := json.Marshal(album)

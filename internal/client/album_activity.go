@@ -17,6 +17,7 @@
 
 package client
 
+/*
 type AlbumActivityUpdate struct {
 	IsActivityEnabled bool `json:"isActivityEnabled"`
 }
@@ -26,3 +27,4 @@ func (c *Client) UpdateAlbumActivity(albumId string, album AlbumActivityUpdate) 
 
 	return newAlbum, err
 }
+*/

@@ -43,7 +43,8 @@ type partnerResource struct {
 }
 
 type partnerResourceModel struct {
-	ID types.String `tfsdk:"id"`
+	ID         types.String `tfsdk:"id"`
+	InTimeline types.Bool   `tfsdk:"in_timeline"`
 }
 
 func (r *partnerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -55,6 +56,10 @@ func (r *partnerResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required: true,
+			},
+			"in_timeline": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
 			},
 		},
 	}
@@ -68,7 +73,7 @@ func (r *partnerResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	partner := client.PartnerUpdate{
+	partner := client.PartnerCreateDto{
 		SharedWithId: plan.ID.ValueString(),
 	}
 
@@ -143,8 +148,8 @@ func (r *partnerResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	partner := client.PartnerUpdate{
-		SharedWithId: plan.ID.ValueString(),
+	partner := client.PartnerUpdateDto{
+		InTimeline: plan.InTimeline.ValueBool(),
 	}
 
 	updatedPartner, err := r.client.UpdatePartner(plan.ID.ValueString(), partner)

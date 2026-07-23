@@ -28,7 +28,7 @@ import (
 
 func TestCreatePartner(t *testing.T) {
 
-	data := Partner{
+	data := PartnerResponseDto{
 		Id:               "bcfbcff7-d844-40d0-8e87-50afae70a628",
 		Email:            "test447a@example.com",
 		Name:             "test447a",
@@ -50,7 +50,7 @@ func TestCreatePartner(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	partner, err := c.CreatePartner(PartnerUpdate{
+	partner, err := c.CreatePartner(PartnerCreateDto{
 		SharedWithId: "bcfbcff7-d844-40d0-8e87-50afae70a628",
 	})
 
@@ -69,7 +69,7 @@ func TestGetPartners(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetPartners should use the GET method")
 
-		partners := [1]Partner{{
+		partners := [1]PartnerResponseDto{{
 			Id:               id,
 			Email:            "test447a@example.com",
 			Name:             "test447a",
@@ -111,7 +111,7 @@ func TestGetPartners(t *testing.T) {
 
 func TestGetPartner(t *testing.T) {
 
-	data := Partner{
+	data := PartnerResponseDto{
 		Id:               "bcfbcff7-d844-40d0-8e87-50afae70a628",
 		Email:            "test447a@example.com",
 		Name:             "test447a",
@@ -146,14 +146,14 @@ func TestGetPartner(t *testing.T) {
 
 func TestUpdatePartner(t *testing.T) {
 
-	data := Partner{
+	data := PartnerResponseDto{
 		Id:               "bcfbcff7-d844-40d0-8e87-50afae70a628",
 		Email:            "test447a@example.com",
 		Name:             "test447a",
 		ProfileImagePath: "",
 		AvatarColor:      "red",
 		ProfileChangedAt: "2026-07-09T05:27:10.749066+00:00",
-		InTimeline:       false,
+		InTimeline:       true,
 	}
 
 	server := createTestServer(t, data)
@@ -170,8 +170,8 @@ func TestUpdatePartner(t *testing.T) {
 
 	id := "bcfbcff7-d844-40d0-8e87-50afae70a628"
 
-	partner, err := c.UpdatePartner(id, PartnerUpdate{
-		SharedWithId: "bcfbcff7-d844-40d0-8e87-50afae70a628",
+	partner, err := c.UpdatePartner(id, PartnerUpdateDto{
+		InTimeline: true,
 	})
 
 	if err != nil {
@@ -183,7 +183,7 @@ func TestUpdatePartner(t *testing.T) {
 
 func TestDeletePartner(t *testing.T) {
 
-	data := Partner{
+	data := PartnerResponseDto{
 		Id:               "bcfbcff7-d844-40d0-8e87-50afae70a628",
 		Email:            "test447a@example.com",
 		Name:             "test447a",

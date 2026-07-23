@@ -49,6 +49,7 @@ type albumResourceModel struct {
 	ID          types.String `tfsdk:"id"`
 	AlbumName   types.String `tfsdk:"album_name"`
 	Description types.String `tfsdk:"description"`
+	Order       types.String `tfsdk:"order"`
 	LastUpdated types.String `tfsdk:"last_updated"`
 }
 
@@ -71,6 +72,10 @@ func (r *albumResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			"description": schema.StringAttribute{
 				Optional: true,
 			},
+			"order": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
+			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
 			},
@@ -86,7 +91,7 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	album := client.AlbumUpdate{
+	album := client.CreateAlbumDto{
 		AlbumName:   plan.AlbumName.ValueString(),
 		Description: plan.Description.ValueString(),
 	}
@@ -100,9 +105,10 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	plan.ID = types.StringValue(newAlbum.ID)
+	plan.ID = types.StringValue(newAlbum.Id)
 	plan.AlbumName = types.StringValue(newAlbum.AlbumName)
 	plan.Description = types.StringValue(newAlbum.Description)
+	plan.Order = types.StringValue(newAlbum.Order)
 	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)
@@ -131,6 +137,7 @@ func (r *albumResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
 	state.AlbumName = types.StringValue(album.AlbumName)
 	state.Description = types.StringValue(album.Description)
+	state.Order = types.StringValue(album.Order)
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -147,9 +154,10 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	album := client.AlbumUpdate{
+	album := client.UpdateAlbumDto{
 		AlbumName:   plan.AlbumName.ValueString(),
 		Description: plan.Description.ValueString(),
+		Order:       plan.Order.ValueString(),
 	}
 
 	updatedAlbum, err := r.client.UpdateAlbum(plan.ID.ValueString(), album)
@@ -162,9 +170,10 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	plan.ID = types.StringValue(updatedAlbum.ID)
+	plan.ID = types.StringValue(updatedAlbum.Id)
 	plan.AlbumName = types.StringValue(updatedAlbum.AlbumName)
 	plan.Description = types.StringValue(updatedAlbum.Description)
+	plan.Order = types.StringValue(updatedAlbum.Order)
 	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)

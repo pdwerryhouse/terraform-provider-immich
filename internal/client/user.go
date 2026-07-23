@@ -46,6 +46,15 @@ type User struct {
 	DeletedAt            string `json:"deletedAt"`
 }
 
+type UserResponseDto struct {
+	AvatarColor      string `json:"avatarColor"`
+	Email            string `json:"email"`
+	Id               string `json:"id"`
+	Name             string `json:"name"`
+	ProfileChangedAt string `json:"profileChangedAt"`
+	ProfileImagePath string `json:"profileImagePath"`
+}
+
 type UserUpdate struct {
 	Name                 string `json:"name"`
 	Email                string `json:"email"`

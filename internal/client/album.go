@@ -23,29 +23,56 @@ import (
 	"net/http"
 )
 
-type AlbumUpdate struct {
-	AlbumName   string `json:"albumName,omitempty"`
-	Description string `json:"description,omitempty"`
+type AlbumUserResponseDto struct {
+	Role string          `json:"role"`
+	User UserResponseDto `json:"user"`
 }
 
-type Album struct {
-	ID                    string `json:"id"`
+type ContributorCountResponseDto struct {
+	AssetCount int64  `json:"assetCount"`
+	UserId     string `json:"userId"`
+}
+
+type AlbumResponseDto struct {
+	AlbumName                  string                        `json:"albumName"`
+	AlbumThumbnailAssetId      string                        `json:"albumThumbnailAssetId"`
+	AlbumUsers                 []AlbumUserResponseDto        `json:"albumUsers"`
+	AssetCount                 int64                         `json:"assetCount"`
+	ContributorCounts          []ContributorCountResponseDto `json:"contributorCounts"`
+	CreatedAt                  string                        `json:"createdAt"`
+	Description                string                        `json:"description"`
+	EndDate                    string                        `json:"endDate"`
+	HasSharedLink              bool                          `json:"hasSharedLink"`
+	Id                         string                        `json:"id"`
+	IsActivityEnabled          bool                          `json:"isActivityEnabled"`
+	LastModifiedAssetTimestamp string                        `json:"lastModifiedAssetTimestamp"`
+	Order                      string                        `json:"order"`
+	Shared                     bool                          `json:"shared"`
+	StartDate                  string                        `json:"startDate"`
+	UpdatedAt                  string                        `json:"updatedAt"`
+}
+
+type AlbumUserCreateDto struct {
+	Role   string `json:"role"`
+	UserId string `json:"userId"`
+}
+
+type CreateAlbumDto struct {
+	AlbumName   string               `json:"albumName"`
+	AlbumUsers  []AlbumUserCreateDto `json:"albumUsers,omitempty"`
+	AssetIds    []string             `json:"assetIds,omitempty"`
+	Description string               `json:"description"`
+}
+
+type UpdateAlbumDto struct {
 	AlbumName             string `json:"albumName"`
-	AlbumThumbnailAssetId string `json:"albumThumbnailAssetId"`
+	AlbumThumbnailAssetId string `json:"albumThumbnailAssetId,omitempty"`
 	Description           string `json:"description"`
-	Shared                bool   `json:"shared"`
-	HasSharedLink         bool   `json:"hasSharedLink"`
-	Order                 string `json:"order"`
 	IsActivityEnabled     bool   `json:"isActivityEnabled"`
-	CreatedAt             string `json:"createdAt"`
-	UpdatedAt             string `json:"updatedAt"`
-	StartDate             string `json:"startDate"`
-	EndDate               string `json:"endDate"`
-	OwnerId               string `json:"ownerId"`
-	Owner                 Owner  `json:"owner"`
+	Order                 string `json:"order"`
 }
 
-func (c *Client) GetAlbums() ([]Album, error) {
+func (c *Client) GetAlbums() ([]AlbumResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/albums", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -56,7 +83,7 @@ func (c *Client) GetAlbums() ([]Album, error) {
 		return nil, err
 	}
 
-	albums := []Album{}
+	albums := []AlbumResponseDto{}
 	err = json.Unmarshal(body, &albums)
 	if err != nil {
 		return nil, err
@@ -65,20 +92,20 @@ func (c *Client) GetAlbums() ([]Album, error) {
 	return albums, nil
 }
 
-func (c *Client) GetAlbum(albumId string) (*Album, error) {
-	album, err := get_by_id[Album](c, albumId, "albums")
+func (c *Client) GetAlbum(albumId string) (*AlbumResponseDto, error) {
+	album, err := get_by_id[AlbumResponseDto](c, albumId, "albums")
 
 	return album, err
 }
 
-func (c *Client) CreateAlbum(album AlbumUpdate) (*Album, error) {
-	newAlbum, err := post[Album](c, "albums", album)
+func (c *Client) CreateAlbum(album CreateAlbumDto) (*AlbumResponseDto, error) {
+	newAlbum, err := post[AlbumResponseDto](c, "albums", album)
 
 	return newAlbum, err
 }
 
-func (c *Client) UpdateAlbum(albumId string, album AlbumUpdate) (*Album, error) {
-	newAlbum, err := patch[Album](c, albumId, "albums", album)
+func (c *Client) UpdateAlbum(albumId string, album UpdateAlbumDto) (*AlbumResponseDto, error) {
+	newAlbum, err := patch[AlbumResponseDto](c, albumId, "albums", album)
 
 	return newAlbum, err
 }
