@@ -17,7 +17,7 @@
 
 package client
 
-type ServerAbout struct {
+type ServerAboutResponseDto struct {
 	Build                      string `json:"build"`
 	BuildImage                 string `json:"buildImage"`
 	BuildImageUrl              string `json:"buildImageUrl"`
@@ -41,7 +41,7 @@ type ServerAbout struct {
 	VersionUrl                 string `json:"versionUrl"`
 }
 
-type ServerConfig struct {
+type ServerConfigDto struct {
 	ExternalDomain   string `json:"externalDomain"`
 	IsInitialized    bool   `json:"isInitialized"`
 	IsOnboarded      bool   `json:"isOnboarded"`
@@ -56,7 +56,7 @@ type ServerConfig struct {
 	UserDeleteDelay  int64  `json:"userDeleteDelay"`
 }
 
-type ServerFeatures struct {
+type ServerFeaturesDto struct {
 	ConfigFile          bool `json:"configFile"`
 	DuplicateDetection  bool `json:"duplicateDetection"`
 	Email               bool `json:"email"`
@@ -75,36 +75,48 @@ type ServerFeatures struct {
 	Trash               bool `json:"trash"`
 }
 
-type ServerStorage struct {
-	DiskAvailable       string  `json:"diskAvailable"`
-	DiskAvailableRaw    int64   `json:"diskAvailableRaw"`
-	DiskSize            string  `json:"diskSize"`
-	DiskSizeRaw         int64   `json:"diskSizeRaw"`
-	DiskUsagePercentage float64 `json:"diskUsagePercentage"`
-	DiskUse             string  `json:"diskUse"`
-	DiskUseRaw          int64   `json:"diskUseRaw"`
+type ServerStorageResponseDto struct {
+	DiskAvailable       string `json:"diskAvailable"`
+	DiskAvailableRaw    int64  `json:"diskAvailableRaw"`
+	DiskSize            string `json:"diskSize"`
+	DiskSizeRaw         int64  `json:"diskSizeRaw"`
+	DiskUsagePercentage int64  `json:"diskUsagePercentage"`
+	DiskUse             string `json:"diskUse"`
+	DiskUseRaw          int64  `json:"diskUseRaw"`
 }
 
-func (c *Client) GetServerAbout() (*ServerAbout, error) {
-	ServerAbout, err := get[ServerAbout](c, "server/about")
+type UserLicense struct {
+	ActivatedAt   string `json:"activatedAt"`
+	ActivationKey string `json:"activationKey"`
+	LicenseKey    string `json:"licenseKey"`
+}
+
+func (c *Client) GetServerAbout() (*ServerAboutResponseDto, error) {
+	ServerAbout, err := get[ServerAboutResponseDto](c, "server/about")
 
 	return ServerAbout, err
 }
 
-func (c *Client) GetServerConfig() (*ServerConfig, error) {
-	ServerConfig, err := get[ServerConfig](c, "server/config")
+func (c *Client) GetServerConfig() (*ServerConfigDto, error) {
+	ServerConfig, err := get[ServerConfigDto](c, "server/config")
 
 	return ServerConfig, err
 }
 
-func (c *Client) GetServerFeatures() (*ServerFeatures, error) {
-	ServerFeatures, err := get[ServerFeatures](c, "server/features")
+func (c *Client) GetServerFeatures() (*ServerFeaturesDto, error) {
+	ServerFeatures, err := get[ServerFeaturesDto](c, "server/features")
 
 	return ServerFeatures, err
 }
 
-func (c *Client) GetServerStorage() (*ServerStorage, error) {
-	ServerStorage, err := get[ServerStorage](c, "server/storage")
+func (c *Client) GetServerStorage() (*ServerStorageResponseDto, error) {
+	ServerStorage, err := get[ServerStorageResponseDto](c, "server/storage")
+
+	return ServerStorage, err
+}
+
+func (c *Client) GetServerLicense() (*ServerStorageResponseDto, error) {
+	ServerStorage, err := get[ServerStorageResponseDto](c, "server/storage")
 
 	return ServerStorage, err
 }

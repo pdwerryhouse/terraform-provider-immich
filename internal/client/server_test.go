@@ -25,7 +25,7 @@ import (
 
 func TestGetServerAbout(t *testing.T) {
 
-	data := ServerAbout{
+	data := ServerAboutResponseDto{
 		Version:       "v3.0.1",
 		VersionUrl:    "https://github.com/immich-app/immich/releases/tag/v3.0.1",
 		Licensed:      false,
@@ -67,7 +67,7 @@ func TestGetServerAbout(t *testing.T) {
 
 func TestGetServerConfig(t *testing.T) {
 
-	data := ServerConfig{
+	data := ServerConfigDto{
 		LoginPageMessage: "",
 		TrashDays:        30,
 		UserDeleteDelay:  7,
@@ -104,7 +104,7 @@ func TestGetServerConfig(t *testing.T) {
 
 func TestGetServerFeatures(t *testing.T) {
 
-	data := ServerFeatures{
+	data := ServerFeaturesDto{
 		SmartSearch:         true,
 		FacialRecognition:   true,
 		DuplicateDetection:  true,
@@ -145,14 +145,14 @@ func TestGetServerFeatures(t *testing.T) {
 
 func TestGetServerStorage(t *testing.T) {
 
-	data := ServerStorage{
+	data := ServerStorageResponseDto{
 		DiskAvailable:       "183.7 GiB",
 		DiskSize:            "617.2 GiB",
 		DiskUse:             "424.2 GiB",
 		DiskAvailableRaw:    197298446336,
 		DiskSizeRaw:         662684303360,
 		DiskUseRaw:          455459086336,
-		DiskUsagePercentage: 68.73,
+		DiskUsagePercentage: 68,
 	}
 
 	server := createTestServer(t, data)

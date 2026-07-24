@@ -102,7 +102,7 @@ func (r *personResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	person := client.PersonUpdate{
+	person := client.PersonCreateDto{
 		BirthDate:  plan.BirthDate.ValueString(),
 		Color:      plan.Color.ValueString(),
 		IsFavorite: plan.IsFavorite.ValueBool(),
@@ -119,7 +119,7 @@ func (r *personResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	plan.ID = types.StringValue(newPerson.ID)
+	plan.ID = types.StringValue(newPerson.Id)
 	plan.BirthDate = types.StringValue(newPerson.BirthDate)
 	plan.Color = types.StringValue(newPerson.Color)
 	plan.IsFavorite = types.BoolValue(newPerson.IsFavorite)
@@ -171,7 +171,7 @@ func (r *personResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	person := client.PersonUpdate{
+	person := client.PersonUpdateDto{
 		BirthDate:  plan.BirthDate.ValueString(),
 		Color:      plan.Color.ValueString(),
 		IsFavorite: plan.IsFavorite.ValueBool(),
@@ -189,7 +189,7 @@ func (r *personResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	plan.ID = types.StringValue(updatedPerson.ID)
+	plan.ID = types.StringValue(updatedPerson.Id)
 	plan.BirthDate = types.StringValue(updatedPerson.BirthDate)
 	plan.Color = types.StringValue(updatedPerson.Color)
 	plan.IsFavorite = types.BoolValue(updatedPerson.IsFavorite)

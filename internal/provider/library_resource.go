@@ -107,7 +107,7 @@ func (r *libraryResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	library := client.LibraryUpdate{
+	library := client.CreateLibraryDto{
 		ExclusionPatterns: exclusionPatterns,
 		ImportPaths:       importPaths,
 		Name:              plan.Name.ValueString(),
@@ -207,11 +207,10 @@ func (r *libraryResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	library := client.LibraryUpdate{
+	library := client.UpdateLibraryDto{
 		ExclusionPatterns: ExclusionPatterns,
 		ImportPaths:       ImportPaths,
 		Name:              plan.Name.ValueString(),
-		OwnerId:           plan.OwnerId.ValueString(),
 	}
 
 	updatedLibrary, err := r.client.UpdateLibrary(plan.ID.ValueString(), library)

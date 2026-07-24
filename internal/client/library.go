@@ -23,14 +23,7 @@ import (
 	"net/http"
 )
 
-type LibraryUpdate struct {
-	ExclusionPatterns []string `json:"exclusionPatterns"`
-	ImportPaths       []string `json:"importPaths"`
-	Name              string   `json:"name"`
-	OwnerId           string   `json:"ownerId"`
-}
-
-type Library struct {
+type LibraryResponseDto struct {
 	AssetCount        int64    `json:"assetCount"`
 	CreatedAt         string   `json:"createdAt"`
 	ExclusionPatterns []string `json:"exclusionPatterns"`
@@ -42,7 +35,20 @@ type Library struct {
 	UpdatedAt         string   `json:"updatedAt"`
 }
 
-func (c *Client) GetLibraries() ([]Library, error) {
+type CreateLibraryDto struct {
+	ExclusionPatterns []string `json:"exclusionPatterns"`
+	ImportPaths       []string `json:"importPaths"`
+	Name              string   `json:"name"`
+	OwnerId           string   `json:"ownerId,omitempty"`
+}
+
+type UpdateLibraryDto struct {
+	ExclusionPatterns []string `json:"exclusionPatterns"`
+	ImportPaths       []string `json:"importPaths"`
+	Name              string   `json:"name"`
+}
+
+func (c *Client) GetLibraries() ([]LibraryResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/libraries", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -53,7 +59,7 @@ func (c *Client) GetLibraries() ([]Library, error) {
 		return nil, err
 	}
 
-	libraries := []Library{}
+	libraries := []LibraryResponseDto{}
 	err = json.Unmarshal(body, &libraries)
 	if err != nil {
 		return nil, err
@@ -62,20 +68,20 @@ func (c *Client) GetLibraries() ([]Library, error) {
 	return libraries, nil
 }
 
-func (c *Client) GetLibrary(libraryId string) (*Library, error) {
-	library, err := get_by_id[Library](c, libraryId, "libraries")
+func (c *Client) GetLibrary(libraryId string) (*LibraryResponseDto, error) {
+	library, err := get_by_id[LibraryResponseDto](c, libraryId, "libraries")
 
 	return library, err
 }
 
-func (c *Client) CreateLibrary(library LibraryUpdate) (*Library, error) {
-	newLibrary, err := post[Library](c, "libraries", library)
+func (c *Client) CreateLibrary(library CreateLibraryDto) (*LibraryResponseDto, error) {
+	newLibrary, err := post[LibraryResponseDto](c, "libraries", library)
 
 	return newLibrary, err
 }
 
-func (c *Client) UpdateLibrary(libraryId string, library LibraryUpdate) (*Library, error) {
-	newLibrary, err := patch[Library](c, libraryId, "libraries", library)
+func (c *Client) UpdateLibrary(libraryId string, library UpdateLibraryDto) (*LibraryResponseDto, error) {
+	newLibrary, err := patch[LibraryResponseDto](c, libraryId, "libraries", library)
 
 	return newLibrary, err
 }

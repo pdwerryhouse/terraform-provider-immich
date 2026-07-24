@@ -23,16 +23,6 @@ import (
 	"net/http"
 )
 
-type Tag struct {
-	ID        string `json:"id"`
-	Color     string `json:"color"`
-	CreatedAt string `json:"createdAt"`
-	Name      string `json:"name"`
-	ParentId  string `json:"parentId"`
-	UpdatedAt string `json:"updatedAt"`
-	Value     string `json:"value"`
-}
-
 type TagResponseDto struct {
 	Color     string `json:"color"`
 	CreatedAt string `json:"createdAt"`
@@ -43,13 +33,17 @@ type TagResponseDto struct {
 	Value     string `json:"value"`
 }
 
-type TagUpdate struct {
+type TagCreateDto struct {
+	Color    string `json:"color"`
 	Name     string `json:"name"`
-	Color    string `json:"color,omitempty"`
 	ParentId string `json:"parentId,omitempty"`
 }
 
-func (c *Client) GetTags() ([]Tag, error) {
+type TagUpdateDto struct {
+	Color string `json:"color"`
+}
+
+func (c *Client) GetTags() ([]TagResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/tags", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -60,7 +54,7 @@ func (c *Client) GetTags() ([]Tag, error) {
 		return nil, err
 	}
 
-	tags := []Tag{}
+	tags := []TagResponseDto{}
 	err = json.Unmarshal(body, &tags)
 	if err != nil {
 		return nil, err
@@ -69,20 +63,20 @@ func (c *Client) GetTags() ([]Tag, error) {
 	return tags, nil
 }
 
-func (c *Client) GetTag(tagId string) (*Tag, error) {
-	tag, err := get_by_id[Tag](c, tagId, "tags")
+func (c *Client) GetTag(tagId string) (*TagResponseDto, error) {
+	tag, err := get_by_id[TagResponseDto](c, tagId, "tags")
 
 	return tag, err
 }
 
-func (c *Client) CreateTag(tag TagUpdate) (*Tag, error) {
-	newTag, err := post[Tag](c, "tags", tag)
+func (c *Client) CreateTag(tag TagCreateDto) (*TagResponseDto, error) {
+	newTag, err := post[TagResponseDto](c, "tags", tag)
 
 	return newTag, err
 }
 
-func (c *Client) UpdateTag(tagId string, tag TagUpdate) (*Tag, error) {
-	newTag, err := put[Tag](c, tagId, "tags", tag)
+func (c *Client) UpdateTag(tagId string, tag TagUpdateDto) (*TagResponseDto, error) {
+	newTag, err := put[TagResponseDto](c, tagId, "tags", tag)
 
 	return newTag, err
 }

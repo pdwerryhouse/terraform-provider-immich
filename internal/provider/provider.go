@@ -151,6 +151,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 
 func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewActivitiesDataSource,
 		NewAlbumsDataSource,
 		NewApiKeysDataSource,
 		NewLibrariesDataSource,
@@ -167,6 +168,7 @@ func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.Da
 
 func (p *immichProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewActivityResource,
 		NewAlbumResource,
 		//NewAlbumActivityResource,
 		//NewAlbumOrderResource,

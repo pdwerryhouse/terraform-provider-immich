@@ -30,8 +30,8 @@ import (
 func TestCreateUser(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
-		user := User{
-			ID:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
+		user := UserAdminResponseDto{
+			Id:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
 			Email:                "test4@example.com",
 			Name:                 "Test4",
 			ProfileImagePath:     "",
@@ -67,7 +67,7 @@ func TestCreateUser(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	user := UserUpdate{
+	user := UserAdminCreateDto{
 		Name:     "Test4",
 		Email:    "test4@example.com",
 		Password: "xxxxxxxxxxxxxxxxxx",
@@ -80,8 +80,8 @@ func TestCreateUser(t *testing.T) {
 
 	id := "c906aacc-fae0-4291-af97-6aef5b26eb43"
 
-	if newUser.ID != id {
-		t.Errorf("Expected %v. Got %v\n", id, newUser.ID)
+	if newUser.Id != id {
+		t.Errorf("Expected %v. Got %v\n", id, newUser.Id)
 	}
 }
 
@@ -93,8 +93,8 @@ func TestGetUsers(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetUsers should use the GET method")
 
-		users := [1]User{{
-			ID:                   id,
+		users := [1]UserAdminResponseDto{{
+			Id:                   id,
 			Email:                "test4@example.com",
 			Name:                 "Test4",
 			ProfileImagePath:     "",
@@ -137,7 +137,7 @@ func TestGetUsers(t *testing.T) {
 
 	// XXX fix this
 	for _, user := range users {
-		assert.Equal(t, id, user.ID, "user.Id is incorrect")
+		assert.Equal(t, id, user.Id, "user.Id is incorrect")
 	}
 }
 
@@ -150,8 +150,8 @@ func TestGetUser(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		user := User{
-			ID:                   id,
+		user := UserAdminResponseDto{
+			Id:                   id,
 			Email:                "test4@example.com",
 			Name:                 "Test4",
 			ProfileImagePath:     "",
@@ -194,7 +194,7 @@ func TestGetUser(t *testing.T) {
 		t.Error("Got an error when trying to run GetUser.\n")
 	}
 
-	assert.Equal(t, user.ID, id, "user.Id is incorrect")
+	assert.Equal(t, user.Id, id, "user.Id is incorrect")
 }
 
 func TestUpdateUser(t *testing.T) {
@@ -202,8 +202,8 @@ func TestUpdateUser(t *testing.T) {
 
 		assert.Equal(t, req.Method, "PATCH", "UpdateUser should use the PATCH method")
 
-		user := User{
-			ID:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
+		user := UserAdminResponseDto{
+			Id:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
 			Email:                "test4@example.com",
 			Name:                 "Test4",
 			ProfileImagePath:     "",
@@ -239,7 +239,7 @@ func TestUpdateUser(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	user := UserUpdate{
+	user := UserAdminUpdateDto{
 		Name:     "Test4",
 		Email:    "test4@example.com",
 		Password: "xxxxxxxxxxxxxxxxxx",
@@ -252,8 +252,8 @@ func TestUpdateUser(t *testing.T) {
 		t.Error("Got an error when trying to run UpdateUser.\n")
 	}
 
-	if newUser.ID != id {
-		t.Errorf("Expected %v. Got %v\n", id, newUser.ID)
+	if newUser.Id != id {
+		t.Errorf("Expected %v. Got %v\n", id, newUser.Id)
 	}
 }
 
@@ -262,8 +262,8 @@ func TestDeleteUser(t *testing.T) {
 
 		assert.Equal(t, req.Method, "DELETE", "DeleteUser should use the DELETE method")
 
-		user := User{
-			ID:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
+		user := UserAdminResponseDto{
+			Id:                   "c906aacc-fae0-4291-af97-6aef5b26eb43",
 			Email:                "test4@example.com",
 			Name:                 "Test4",
 			ProfileImagePath:     "",

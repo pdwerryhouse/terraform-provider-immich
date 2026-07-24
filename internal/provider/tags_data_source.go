@@ -73,7 +73,7 @@ func (d *tagsDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 
 	for _, tag := range tags {
 		tagState := tagsModel{
-			ID:        types.StringValue(tag.ID),
+			ID:        types.StringValue(tag.Id),
 			Color:     types.StringValue(tag.Color),
 			CreatedAt: types.StringValue(tag.CreatedAt),
 			Name:      types.StringValue(tag.Name),

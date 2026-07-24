@@ -23,25 +23,30 @@ import (
 	"net/http"
 )
 
-type ApiKey struct {
+type ApiKeyResponseDto struct {
+	CreatedAt   string   `json:"createdAt"`
 	Id          string   `json:"id"`
 	Name        string   `json:"name"`
 	Permissions []string `json:"permissions"`
-	CreatedAt   string   `json:"createdAt"`
 	UpdatedAt   string   `json:"updatedAt"`
 }
 
-type ApiKeyUpdate struct {
+type ApiKeyCreateDto struct {
 	Name        string   `json:"name"`
 	Permissions []string `json:"permissions"`
 }
 
-type ApiKeyCreate struct {
-	ApiKey ApiKey `json:"apiKey"`
-	Secret string `json:"secret"`
+type ApiKeyCreateResponseDto struct {
+	ApiKey ApiKeyResponseDto `json:"apiKey"`
+	Secret string            `json:"secret"`
 }
 
-func (c *Client) GetApiKeys() ([]ApiKey, error) {
+type ApiKeyUpdateDto struct {
+	Name        string   `json:"name"`
+	Permissions []string `json:"permissions"`
+}
+
+func (c *Client) GetApiKeys() ([]ApiKeyResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/api-keys", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -52,7 +57,7 @@ func (c *Client) GetApiKeys() ([]ApiKey, error) {
 		return nil, err
 	}
 
-	apiKeys := []ApiKey{}
+	apiKeys := []ApiKeyResponseDto{}
 	err = json.Unmarshal(body, &apiKeys)
 	if err != nil {
 		return nil, err
@@ -61,26 +66,26 @@ func (c *Client) GetApiKeys() ([]ApiKey, error) {
 	return apiKeys, nil
 }
 
-func (c *Client) GetApiKey(apiKeyId string) (*ApiKey, error) {
-	apiKey, err := get_by_id[ApiKey](c, apiKeyId, "api-keys")
+func (c *Client) GetApiKey(apiKeyId string) (*ApiKeyResponseDto, error) {
+	apiKey, err := get_by_id[ApiKeyResponseDto](c, apiKeyId, "api-keys")
 
 	return apiKey, err
 }
 
-func (c *Client) GetMyApiKey() (*ApiKey, error) {
-	apiKey, err := get[ApiKey](c, "api-keys/me")
+func (c *Client) GetMyApiKey() (*ApiKeyResponseDto, error) {
+	apiKey, err := get[ApiKeyResponseDto](c, "api-keys/me")
 
 	return apiKey, err
 }
 
-func (c *Client) CreateApiKey(apiKey ApiKeyUpdate) (*ApiKeyCreate, error) {
-	newApiKey, err := post[ApiKeyCreate](c, "api-keys", apiKey)
+func (c *Client) CreateApiKey(apiKey ApiKeyCreateDto) (*ApiKeyCreateResponseDto, error) {
+	newApiKey, err := post[ApiKeyCreateResponseDto](c, "api-keys", apiKey)
 
 	return newApiKey, err
 }
 
-func (c *Client) UpdateApiKey(apiKeyId string, apiKey ApiKeyUpdate) (*ApiKey, error) {
-	newApiKey, err := put[ApiKey](c, apiKeyId, "api-keys", apiKey)
+func (c *Client) UpdateApiKey(apiKeyId string, apiKey ApiKeyUpdateDto) (*ApiKeyResponseDto, error) {
+	newApiKey, err := put[ApiKeyResponseDto](c, apiKeyId, "api-keys", apiKey)
 
 	return newApiKey, err
 }

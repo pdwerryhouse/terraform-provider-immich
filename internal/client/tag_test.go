@@ -29,8 +29,8 @@ import (
 
 func TestCreateTag(t *testing.T) {
 
-	data := Tag{
-		ID:        "bcfbcff7-d844-40d0-8e87-50afae70a628",
+	data := TagResponseDto{
+		Id:        "bcfbcff7-d844-40d0-8e87-50afae70a628",
 		Name:      "test",
 		Color:     "#443322",
 		CreatedAt: "2026-07-09T05:27:10.749066+00:00",
@@ -50,7 +50,7 @@ func TestCreateTag(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	tag, err := c.CreateTag(TagUpdate{
+	tag, err := c.CreateTag(TagCreateDto{
 		Name:  "blah",
 		Color: "#443322",
 	})
@@ -59,7 +59,7 @@ func TestCreateTag(t *testing.T) {
 		t.Error("Got an error when trying to run CreateTag.\n")
 	}
 
-	assert.Equal(t, tag.ID, "bcfbcff7-d844-40d0-8e87-50afae70a628", "tag.Id is incorrect")
+	assert.Equal(t, tag.Id, "bcfbcff7-d844-40d0-8e87-50afae70a628", "tag.Id is incorrect")
 }
 
 func TestGetTags(t *testing.T) {
@@ -70,8 +70,8 @@ func TestGetTags(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetTags should use the GET method")
 
-		tags := [1]Tag{{
-			ID:        id,
+		tags := [1]TagResponseDto{{
+			Id:        id,
 			Name:      "test",
 			Color:     "#443322",
 			CreatedAt: "2026-07-09T05:27:10.749066+00:00",
@@ -104,7 +104,7 @@ func TestGetTags(t *testing.T) {
 
 	// XXX fix this
 	for _, tag := range tags {
-		assert.Equal(t, id, tag.ID, "tag.Id is incorrect")
+		assert.Equal(t, id, tag.Id, "tag.Id is incorrect")
 		assert.Equal(t, "test", tag.Name, "tag.Name is incorrect")
 	}
 }
@@ -163,8 +163,8 @@ func TestGetTag(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		tag := Tag{
-			ID:        id,
+		tag := TagResponseDto{
+			Id:        id,
 			Name:      "test",
 			Color:     "#443322",
 			CreatedAt: "2026-07-09T05:27:10.749066+00:00",
@@ -197,7 +197,7 @@ func TestGetTag(t *testing.T) {
 		t.Error("Got an error when trying to run GetTag.\n")
 	}
 
-	assert.Equal(t, tag.ID, id, "tag.Id is incorrect")
+	assert.Equal(t, tag.Id, id, "tag.Id is incorrect")
 }
 
 func TestUpdateTag(t *testing.T) {
@@ -208,8 +208,8 @@ func TestUpdateTag(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		tag := Tag{
-			ID:        id,
+		tag := TagResponseDto{
+			Id:        id,
 			Name:      "test",
 			Color:     "#443322",
 			CreatedAt: "2026-07-09T05:27:10.749066+00:00",
@@ -235,8 +235,7 @@ func TestUpdateTag(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	tag := TagUpdate{
-		Name:  "test",
+	tag := TagUpdateDto{
 		Color: "#443322",
 	}
 
@@ -248,8 +247,8 @@ func TestUpdateTag(t *testing.T) {
 		t.Error("Got an error when trying to run UpdateTag.\n")
 	}
 
-	if newTag.ID != id {
-		t.Errorf("Expected %v. Got %v\n", id, newTag.ID)
+	if newTag.Id != id {
+		t.Errorf("Expected %v. Got %v\n", id, newTag.Id)
 	}
 }
 
@@ -258,8 +257,8 @@ func TestDeleteTag(t *testing.T) {
 
 		assert.Equal(t, req.Method, "DELETE", "DeleteTag should use the DELETE method")
 
-		tag := Tag{
-			ID:        "bcfbcff7-d844-40d0-8e87-50afae70a628",
+		tag := TagResponseDto{
+			Id:        "bcfbcff7-d844-40d0-8e87-50afae70a628",
 			Name:      "test",
 			Color:     "#443322",
 			CreatedAt: "2026-07-09T05:27:10.749066+00:00",

@@ -41,13 +41,13 @@ type serverStorageDataSource struct {
 }
 
 type serverStorageDataSourceModel struct {
-	DiskAvailable       types.String  `tfsdk:"disk_available"`
-	DiskAvailableRaw    types.Int64   `tfsdk:"disk_available_raw"`
-	DiskSize            types.String  `tfsdk:"disk_size"`
-	DiskSizeRaw         types.Int64   `tfsdk:"disk_size_raw"`
-	DiskUsagePercentage types.Float64 `tfsdk:"disk_usage_percentage"`
-	DiskUse             types.String  `tfsdk:"disk_use"`
-	DiskUseRaw          types.Int64   `tfsdk:"disk_use_raw"`
+	DiskAvailable       types.String `tfsdk:"disk_available"`
+	DiskAvailableRaw    types.Int64  `tfsdk:"disk_available_raw"`
+	DiskSize            types.String `tfsdk:"disk_size"`
+	DiskSizeRaw         types.Int64  `tfsdk:"disk_size_raw"`
+	DiskUsagePercentage types.Int64  `tfsdk:"disk_usage_percentage"`
+	DiskUse             types.String `tfsdk:"disk_use"`
+	DiskUseRaw          types.Int64  `tfsdk:"disk_use_raw"`
 }
 
 func (d *serverStorageDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -70,7 +70,7 @@ func (d *serverStorageDataSource) Read(ctx context.Context, req datasource.ReadR
 	state.DiskAvailableRaw = types.Int64Value(serverStorage.DiskAvailableRaw)
 	state.DiskSize = types.StringValue(serverStorage.DiskSize)
 	state.DiskSizeRaw = types.Int64Value(serverStorage.DiskSizeRaw)
-	state.DiskUsagePercentage = types.Float64Value(serverStorage.DiskUsagePercentage)
+	state.DiskUsagePercentage = types.Int64Value(serverStorage.DiskUsagePercentage)
 	state.DiskUse = types.StringValue(serverStorage.DiskUse)
 	state.DiskUseRaw = types.Int64Value(serverStorage.DiskUseRaw)
 

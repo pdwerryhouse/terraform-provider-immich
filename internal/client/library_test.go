@@ -29,7 +29,7 @@ import (
 
 func TestCreateLibrary(t *testing.T) {
 
-	data := Library{
+	data := LibraryResponseDto{
 		Id:                "b097dd49-8328-4331-8402-1f6144fdb291",
 		OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 		Name:              "New External Library",
@@ -53,7 +53,7 @@ func TestCreateLibrary(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	library, err := c.CreateLibrary(LibraryUpdate{
+	library, err := c.CreateLibrary(CreateLibraryDto{
 		Name:              "blah",
 		ImportPaths:       nil,
 		ExclusionPatterns: nil,
@@ -75,7 +75,7 @@ func TestGetLibraries(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetLibrarys should use the GET method")
 
-		librarys := [1]Library{{
+		librarys := [1]LibraryResponseDto{{
 			Id:                id,
 			OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 			Name:              "New External Library",
@@ -125,7 +125,7 @@ func TestGetLibrary(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		library := Library{
+		library := LibraryResponseDto{
 			Id:                id,
 			OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 			Name:              "New External Library",
@@ -173,7 +173,7 @@ func TestUpdateLibrary(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		library := Library{
+		library := LibraryResponseDto{
 			Id:                id,
 			OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 			Name:              "New External Library",
@@ -203,11 +203,10 @@ func TestUpdateLibrary(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	library := LibraryUpdate{
+	library := UpdateLibraryDto{
 		Name:              "blah",
 		ImportPaths:       nil,
 		ExclusionPatterns: nil,
-		OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 	}
 
 	id := "c906aacc-fae0-4291-af97-6aef5b26eb43"
@@ -226,7 +225,7 @@ func TestDeleteLibrary(t *testing.T) {
 
 		assert.Equal(t, req.Method, "DELETE", "DeleteLibrary should use the DELETE method")
 
-		library := Library{
+		library := LibraryResponseDto{
 			Id:                "b097dd49-8328-4331-8402-1f6144fdb291",
 			OwnerId:           "ebd580a9-f019-4bbc-b557-900377becfd0",
 			Name:              "New External Library",

@@ -21,6 +21,7 @@ import (
 	"strings"
 )
 
+/*
 type UserDelete struct {
 	Force bool `json:"bool"`
 }
@@ -45,16 +46,6 @@ type User struct {
 	UpdatedAt            string `json:"updatedAt"`
 	DeletedAt            string `json:"deletedAt"`
 }
-
-type UserResponseDto struct {
-	AvatarColor      string `json:"avatarColor"`
-	Email            string `json:"email"`
-	Id               string `json:"id"`
-	Name             string `json:"name"`
-	ProfileChangedAt string `json:"profileChangedAt"`
-	ProfileImagePath string `json:"profileImagePath"`
-}
-
 type UserUpdate struct {
 	Name                 string `json:"name"`
 	Email                string `json:"email"`
@@ -67,8 +58,67 @@ type UserUpdate struct {
 	PinCode              string `json:"pinCode,omitempty"`
 	AvatarColor          string `json:"avatarColor,omitempty"`
 }
+*/
 
-func (c *Client) GetUsers() ([]User, error) {
+type UserResponseDto struct {
+	AvatarColor      string `json:"avatarColor"`
+	Email            string `json:"email"`
+	Id               string `json:"id"`
+	Name             string `json:"name"`
+	ProfileChangedAt string `json:"profileChangedAt"`
+	ProfileImagePath string `json:"profileImagePath"`
+}
+
+type UserAdminResponseDto struct {
+	AvatarColor          string      `json:"avatarColor"`
+	CreatedAt            string      `json:"createdAt"`
+	DeletedAt            string      `json:"deletedAt"`
+	Email                string      `json:"email"`
+	Id                   string      `json:"id"`
+	IsAdmin              bool        `json:"isAdmin"`
+	License              UserLicense `json:"license"`
+	Name                 string      `json:"name"`
+	OauthId              string      `json:"oauthId"`
+	ProfileChangedAt     string      `json:"profileChangedAt"`
+	ProfileImagePath     string      `json:"profileImagePath"`
+	QuotaSizeInBytes     int64       `json:"quotaSizeInBytes"`
+	QuotaUsageInBytes    int64       `json:"quotaUsageInBytes"`
+	ShouldChangePassword bool        `json:"shouldChangePassword"`
+	Status               string      `json:"status"`
+	StorageLabel         string      `json:"storageLabel"`
+	UpdatedAt            string      `json:"updatedAt"`
+}
+
+type UserAdminCreateDto struct {
+	AvatarColor          string `json:"avatarColor"`
+	Email                string `json:"email"`
+	IsAdmin              bool   `json:"isAdmin"`
+	Name                 string `json:"name"`
+	Notify               bool   `json:"notify"`
+	Password             string `json:"password"`
+	PinCode              string `json:"pinCode"`
+	QuotaSizeInBytes     int64  `json:"quotaSizeInBytes"`
+	ShouldChangePassword bool   `json:"shouldChangePassword"`
+	StorageLabel         string `json:"storageLabel"`
+}
+
+type UserAdminUpdateDto struct {
+	AvatarColor          string `json:"avatarColor,omitempty"`
+	Email                string `json:"email"`
+	IsAdmin              bool   `json:"isAdmin,omitempty"`
+	Name                 string `json:"name"`
+	Password             string `json:"password"`
+	PinCode              string `json:"pinCode,omitempty"`
+	QuotaSizeInBytes     int64  `json:"quotaSizeInBytes,omitempty"`
+	ShouldChangePassword bool   `json:"shouldChangePassword,omitempty"`
+	StorageLabel         string `json:"storageLabel,omitempty"`
+}
+
+type UserAdminDeleteDto struct {
+	Force bool `json:"force"`
+}
+
+func (c *Client) GetUsers() ([]UserAdminResponseDto, error) {
 
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/admin/users", c.Endpoint), nil)
 	if err != nil {
@@ -80,7 +130,7 @@ func (c *Client) GetUsers() ([]User, error) {
 		return nil, err
 	}
 
-	users := []User{}
+	users := []UserAdminResponseDto{}
 	err = json.Unmarshal(body, &users)
 	if err != nil {
 		return nil, err
@@ -89,27 +139,27 @@ func (c *Client) GetUsers() ([]User, error) {
 	return users, nil
 }
 
-func (c *Client) GetUser(userId string) (*User, error) {
-	user, err := get_by_id[User](c, userId, "admin/users")
+func (c *Client) GetUser(userId string) (*UserAdminResponseDto, error) {
+	user, err := get_by_id[UserAdminResponseDto](c, userId, "admin/users")
 
 	return user, err
 }
 
-func (c *Client) CreateUser(user UserUpdate) (*User, error) {
-	newUser, err := post[User](c, "admin/users", user)
+func (c *Client) CreateUser(user UserAdminCreateDto) (*UserAdminResponseDto, error) {
+	newUser, err := post[UserAdminResponseDto](c, "admin/users", user)
 
 	return newUser, err
 }
 
-func (c *Client) UpdateUser(userId string, user UserUpdate) (*User, error) {
-	newUser, err := patch[User](c, userId, "admin/users", user)
+func (c *Client) UpdateUser(userId string, user UserAdminUpdateDto) (*UserAdminResponseDto, error) {
+	newUser, err := patch[UserAdminResponseDto](c, userId, "admin/users", user)
 
 	return newUser, err
 }
 
 func (c *Client) DeleteUser(ID string) error {
 
-	delete := UserDelete{
+	delete := UserAdminDeleteDto{
 		Force: false,
 	}
 
@@ -129,7 +179,7 @@ func (c *Client) DeleteUser(ID string) error {
 		return err
 	}
 
-	updatedUser := User{}
+	updatedUser := UserAdminResponseDto{}
 	err = json.Unmarshal(body, &updatedUser)
 	if err != nil {
 		return err

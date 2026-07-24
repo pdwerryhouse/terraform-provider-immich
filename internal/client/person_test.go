@@ -30,14 +30,14 @@ import (
 func TestCreatePerson(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
-		person := Person{
-			ID:            "bcfbcff7-d844-40d0-8e87-50afae70a628",
+		person := PersonResponseDto{
+			Id:            "bcfbcff7-d844-40d0-8e87-50afae70a628",
 			Name:          "test",
 			Color:         "#443322",
 			BirthDate:     "2026-07-09",
 			IsFavorite:    false,
 			IsHidden:      false,
-			ThumbNailPath: "",
+			ThumbnailPath: "",
 			UpdatedAt:     "2026-07-09T05:27:10.749066+00:00",
 		}
 
@@ -59,7 +59,7 @@ func TestCreatePerson(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	person, err := c.CreatePerson(PersonUpdate{
+	person, err := c.CreatePerson(PersonCreateDto{
 		Name:  "blah",
 		Color: "#443322",
 	})
@@ -68,7 +68,7 @@ func TestCreatePerson(t *testing.T) {
 		t.Error("Got an error when trying to run CreatePerson.\n")
 	}
 
-	assert.Equal(t, person.ID, "bcfbcff7-d844-40d0-8e87-50afae70a628", "person.Id is incorrect")
+	assert.Equal(t, person.Id, "bcfbcff7-d844-40d0-8e87-50afae70a628", "person.Id is incorrect")
 }
 
 func TestGetPeople(t *testing.T) {
@@ -79,22 +79,22 @@ func TestGetPeople(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetPeople should use the GET method")
 
-		person := Person{
-			ID:            id,
+		person := PersonResponseDto{
+			Id:            id,
 			Name:          "test",
 			Color:         "#443322",
 			BirthDate:     "2026-07-09",
 			IsFavorite:    false,
 			IsHidden:      false,
-			ThumbNailPath: "",
+			ThumbnailPath: "",
 			UpdatedAt:     "2026-07-09T05:27:10.749066+00:00",
 		}
 
-		people_response := PeopleResponse{
+		people_response := PeopleResponseDto{
 			HasNextPage: false,
 			Total:       1,
 			Hidden:      0,
-			People:      []Person{person},
+			People:      []PersonResponseDto{person},
 		}
 
 		data, err := json.Marshal(people_response)
@@ -122,7 +122,7 @@ func TestGetPeople(t *testing.T) {
 
 	// XXX fix this
 	for _, person := range people {
-		assert.Equal(t, id, person.ID, "person.Id is incorrect")
+		assert.Equal(t, id, person.Id, "person.Id is incorrect")
 		assert.Equal(t, "test", person.Name, "person.Name is incorrect")
 	}
 }
@@ -181,14 +181,14 @@ func TestGetPerson(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		person := Person{
-			ID:            id,
+		person := PersonResponseDto{
+			Id:            id,
 			Name:          "test",
 			Color:         "#443322",
 			BirthDate:     "2026-07-09",
 			IsFavorite:    false,
 			IsHidden:      false,
-			ThumbNailPath: "",
+			ThumbnailPath: "",
 			UpdatedAt:     "2026-07-09T05:27:10.749066+00:00",
 		}
 
@@ -217,7 +217,7 @@ func TestGetPerson(t *testing.T) {
 		t.Error("Got an error when trying to run GetPerson.\n")
 	}
 
-	assert.Equal(t, person.ID, id, "person.Id is incorrect")
+	assert.Equal(t, person.Id, id, "person.Id is incorrect")
 }
 
 func TestUpdatePerson(t *testing.T) {
@@ -228,14 +228,14 @@ func TestUpdatePerson(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		person := Person{
-			ID:            id,
+		person := PersonResponseDto{
+			Id:            id,
 			Name:          "test",
 			Color:         "#443322",
 			BirthDate:     "2026-07-09",
 			IsFavorite:    false,
 			IsHidden:      false,
-			ThumbNailPath: "",
+			ThumbnailPath: "",
 			UpdatedAt:     "2026-07-09T05:27:10.749066+00:00",
 		}
 
@@ -257,7 +257,7 @@ func TestUpdatePerson(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	person := PersonUpdate{
+	person := PersonUpdateDto{
 		Name:  "test",
 		Color: "#443322",
 	}
@@ -270,8 +270,8 @@ func TestUpdatePerson(t *testing.T) {
 		t.Error("Got an error when trying to run UpdatePerson.\n")
 	}
 
-	if newPerson.ID != id {
-		t.Errorf("Expected %v. Got %v\n", id, newPerson.ID)
+	if newPerson.Id != id {
+		t.Errorf("Expected %v. Got %v\n", id, newPerson.Id)
 	}
 }
 
@@ -283,14 +283,14 @@ func TestDeletePerson(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		person := Person{
-			ID:            id,
+		person := PersonResponseDto{
+			Id:            id,
 			Name:          "test",
 			Color:         "#443322",
 			BirthDate:     "2026-07-09",
 			IsFavorite:    false,
 			IsHidden:      false,
-			ThumbNailPath: "",
+			ThumbnailPath: "",
 			UpdatedAt:     "2026-07-09T05:27:10.749066+00:00",
 		}
 

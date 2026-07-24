@@ -107,7 +107,7 @@ func (r *apiKeyResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	apiKey := client.ApiKeyUpdate{
+	apiKey := client.ApiKeyCreateDto{
 		Name:        plan.Name.ValueString(),
 		Permissions: permissions,
 	}
@@ -189,7 +189,7 @@ func (r *apiKeyResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	apiKey := client.ApiKeyUpdate{
+	apiKey := client.ApiKeyUpdateDto{
 		Name:        plan.Name.ValueString(),
 		Permissions: permissions,
 	}

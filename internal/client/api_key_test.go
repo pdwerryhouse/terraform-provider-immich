@@ -29,8 +29,8 @@ import (
 
 func TestCreateApiKey(t *testing.T) {
 
-	data := ApiKeyCreate{
-		ApiKey: ApiKey{
+	data := ApiKeyCreateResponseDto{
+		ApiKey: ApiKeyResponseDto{
 			Id:          "bcfbcff7-d844-40d0-8e87-50afae70a628",
 			Name:        "test",
 			Permissions: []string{"all"},
@@ -52,7 +52,7 @@ func TestCreateApiKey(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	apiKey, err := c.CreateApiKey(ApiKeyUpdate{
+	apiKey, err := c.CreateApiKey(ApiKeyCreateDto{
 		Name:        "test",
 		Permissions: []string{"all"},
 	})
@@ -72,7 +72,7 @@ func TestGetApiKeys(t *testing.T) {
 
 		assert.Equal(t, req.Method, "GET", "GetApiKeys should use the GET method")
 
-		apiKeys := [1]ApiKey{{
+		apiKeys := [1]ApiKeyResponseDto{{
 			Id:          id,
 			Name:        "test",
 			Permissions: []string{"all"},
@@ -164,7 +164,7 @@ func TestGetApiKey(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		apiKey := ApiKey{
+		apiKey := ApiKeyResponseDto{
 			Id:          id,
 			Name:        "test",
 			Permissions: []string{"all"},
@@ -208,7 +208,7 @@ func TestUpdateApiKey(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		apiKey := ApiKey{
+		apiKey := ApiKeyResponseDto{
 			Id:          id,
 			Name:        "test",
 			Permissions: []string{"all"},
@@ -234,7 +234,7 @@ func TestUpdateApiKey(t *testing.T) {
 		t.Error("Got an error when trying to create a client.\n")
 	}
 
-	apiKey := ApiKeyUpdate{
+	apiKey := ApiKeyUpdateDto{
 		Name:        "test",
 		Permissions: []string{"all"},
 	}
@@ -260,7 +260,7 @@ func TestDeleteApiKey(t *testing.T) {
 		i := strings.LastIndex(req.URL.Path, "/")
 		id := req.URL.Path[i+1:]
 
-		apiKey := ApiKey{
+		apiKey := ApiKeyResponseDto{
 			Id:          id,
 			Name:        "test",
 			Permissions: []string{"all"},

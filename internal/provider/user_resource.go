@@ -141,7 +141,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	user := client.UserUpdate{
+	user := client.UserAdminCreateDto{
 		Name:                 plan.Name.ValueString(),
 		Email:                plan.Email.ValueString(),
 		Password:             plan.Password.ValueString(),
@@ -164,7 +164,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	plan.ID = types.StringValue(newUser.ID)
+	plan.ID = types.StringValue(newUser.Id)
 	//plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	diags = resp.State.Set(ctx, plan)
@@ -210,12 +210,11 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	user := client.UserUpdate{
+	user := client.UserAdminUpdateDto{
 		Name:                 plan.Name.ValueString(),
 		Email:                plan.Email.ValueString(),
 		Password:             plan.Password.ValueString(),
 		IsAdmin:              plan.IsAdmin.ValueBool(),
-		Notify:               plan.Notify.ValueBool(),
 		QuotaSizeInBytes:     plan.QuotaSizeInBytes.ValueInt64(),
 		StorageLabel:         plan.StorageLabel.ValueString(),
 		ShouldChangePassword: plan.ShouldChangePassword.ValueBool(),
@@ -232,7 +231,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	plan.ID = types.StringValue(updatedUser.ID)
+	plan.ID = types.StringValue(updatedUser.Id)
 	//plan.Name = types.StringValue(updatedUser.Name)
 	//plan.Email = types.StringValue(updatedUser.Email)
 

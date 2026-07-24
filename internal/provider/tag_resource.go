@@ -88,7 +88,7 @@ func (r *tagResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	tag := client.TagUpdate{
+	tag := client.TagCreateDto{
 		Name:     plan.Name.ValueString(),
 		Color:    plan.Color.ValueString(),
 		ParentId: plan.ParentId.ValueString(),
@@ -103,7 +103,7 @@ func (r *tagResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	plan.ID = types.StringValue(newTag.ID)
+	plan.ID = types.StringValue(newTag.Id)
 	plan.Color = types.StringValue(newTag.Color)
 	plan.Name = types.StringValue(newTag.Name)
 	plan.ParentId = types.StringValue(newTag.ParentId)
@@ -151,10 +151,8 @@ func (r *tagResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		return
 	}
 
-	tag := client.TagUpdate{
-		Name:     plan.Name.ValueString(),
-		Color:    plan.Color.ValueString(),
-		ParentId: plan.ParentId.ValueString(),
+	tag := client.TagUpdateDto{
+		Color: plan.Color.ValueString(),
 	}
 
 	updatedTag, err := r.client.UpdateTag(plan.ID.ValueString(), tag)
@@ -167,10 +165,8 @@ func (r *tagResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		return
 	}
 
-	plan.ID = types.StringValue(updatedTag.ID)
+	plan.ID = types.StringValue(updatedTag.Id)
 	plan.Color = types.StringValue(tag.Color)
-	plan.Name = types.StringValue(tag.Name)
-	plan.ParentId = types.StringValue(tag.ParentId)
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

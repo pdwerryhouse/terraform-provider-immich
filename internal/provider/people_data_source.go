@@ -48,7 +48,7 @@ type peopleModel struct {
 	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	BirthDate     types.String `tfsdk:"birthdate"`
-	ThumbNailPath types.String `tfsdk:"thumbnail_path"`
+	ThumbnailPath types.String `tfsdk:"thumbnail_path"`
 	IsHidden      types.Bool   `tfsdk:"is_hidden"`
 	IsFavorite    types.Bool   `tfsdk:"is_favorite"`
 	UpdatedAt     types.String `tfsdk:"updated_at"`
@@ -72,10 +72,10 @@ func (d *peopleDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
 	for _, person := range people {
 		peopletate := peopleModel{
-			ID:            types.StringValue(person.ID),
+			ID:            types.StringValue(person.Id),
 			Name:          types.StringValue(person.Name),
 			BirthDate:     types.StringValue(person.BirthDate),
-			ThumbNailPath: types.StringValue(person.ThumbNailPath),
+			ThumbnailPath: types.StringValue(person.ThumbnailPath),
 			IsHidden:      types.BoolValue(person.IsHidden),
 			IsFavorite:    types.BoolValue(person.IsFavorite),
 			UpdatedAt:     types.StringValue(person.UpdatedAt),

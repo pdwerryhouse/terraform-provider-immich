@@ -23,6 +23,7 @@ import (
 	"net/http"
 )
 
+/*
 type PersonUpdate struct {
 	BirthDate  string `json:"birthDate,omitempty"`
 	Color      string `json:"color,omitzero"`
@@ -48,6 +49,34 @@ type PeopleResponse struct {
 	Hidden      int64    `json:"hidden"`
 	People      []Person `json:"people"`
 }
+*/
+
+type PersonCreateDto struct {
+	BirthDate  string `json:"birthDate,omitempty"`
+	Color      string `json:"color,omitempty"`
+	IsFavorite bool   `json:"isFavorite"`
+	IsHidden   bool   `json:"isHidden"`
+	Name       string `json:"name"`
+}
+
+type PersonUpdateDto struct {
+	BirthDate          string `json:"birthDate"`
+	Color              string `json:"color"`
+	FeatureFaceAssetId string `json:"featureFaceAssetId"`
+	IsFavorite         bool   `json:"isFavorite"`
+	IsHidden           bool   `json:"isHidden"`
+	Name               string `json:"name"`
+}
+
+type PeopleUpdateItem struct {
+	BirthDate          string `json:"birthDate,omitempty"`
+	Color              string `json:"color,omitempty"`
+	FeatureFaceAssetId string `json:"featureFaceAssetId"`
+	Id                 string `json:"id"`
+	IsFavorite         bool   `json:"isFavorite"`
+	IsHidden           bool   `json:"isHidden"`
+	Name               string `json:"name"`
+}
 
 type PersonResponseDto struct {
 	BirthDate     string `json:"birthDate"`
@@ -60,8 +89,15 @@ type PersonResponseDto struct {
 	UpdatedAt     string `json:"updatedAt"`
 }
 
+type PeopleResponseDto struct {
+	HasNextPage bool                `json:"hasNextPage"`
+	Hidden      int64               `json:"hidden"`
+	People      []PersonResponseDto `json:"people"`
+	Total       int64               `json:"total"`
+}
+
 // XXX Update this to handle pages
-func (c *Client) GetPeople() ([]Person, error) {
+func (c *Client) GetPeople() ([]PersonResponseDto, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/people", c.Endpoint), nil)
 	if err != nil {
 		return nil, err
@@ -72,7 +108,7 @@ func (c *Client) GetPeople() ([]Person, error) {
 		return nil, err
 	}
 
-	people_response := PeopleResponse{}
+	people_response := PeopleResponseDto{}
 	err = json.Unmarshal(body, &people_response)
 	if err != nil {
 		return nil, err
@@ -81,20 +117,20 @@ func (c *Client) GetPeople() ([]Person, error) {
 	return people_response.People, nil
 }
 
-func (c *Client) GetPerson(personId string) (*Person, error) {
-	person, err := get_by_id[Person](c, personId, "people")
+func (c *Client) GetPerson(personId string) (*PersonResponseDto, error) {
+	person, err := get_by_id[PersonResponseDto](c, personId, "people")
 
 	return person, err
 }
 
-func (c *Client) CreatePerson(person PersonUpdate) (*Person, error) {
-	newPerson, err := post[Person](c, "people", person)
+func (c *Client) CreatePerson(person PersonCreateDto) (*PersonResponseDto, error) {
+	newPerson, err := post[PersonResponseDto](c, "people", person)
 
 	return newPerson, err
 }
 
-func (c *Client) UpdatePerson(personId string, person PersonUpdate) (*Person, error) {
-	newPerson, err := patch[Person](c, personId, "people", person)
+func (c *Client) UpdatePerson(personId string, person PersonUpdateDto) (*PersonResponseDto, error) {
+	newPerson, err := patch[PersonResponseDto](c, personId, "people", person)
 
 	return newPerson, err
 }
