@@ -154,6 +154,7 @@ func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewActivitiesDataSource,
 		NewAlbumsDataSource,
 		NewApiKeysDataSource,
+		NewAssetStatisticsDataSource,
 		NewFacesDataSource,
 		NewLibrariesDataSource,
 		NewUsersDataSource,

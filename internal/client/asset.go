@@ -18,6 +18,7 @@
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -123,10 +124,39 @@ type UpdateAssetDto struct {
 	Visibility       string `json:"visibility"`
 }
 
-func (c *Client) GetAsset(assetId string) (*AssetResponseDto, error) {
-	asset, err := get_by_id[AssetResponseDto](c, assetId, "assets")
+type AssetStatsResponseDto struct {
+	Images int64 `json:"images"`
+	Total  int64 `json:"total"`
+	Videos int64 `json:"videos"`
+}
 
-	return asset, err
+func (c *Client) GetAssetInfo(assetId string, key string, slug string) (*AssetResponseDto, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/assets/%s", c.Endpoint, assetId), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	if key != "" {
+		q.Add("key", key)
+	}
+	if slug != "" {
+		q.Add("slug", slug)
+	}
+	req.URL.RawQuery = q.Encode()
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var asset *AssetResponseDto
+	err = json.Unmarshal(body, &asset)
+	if err != nil {
+		return nil, err
+	}
+
+	return asset, nil
 }
 
 func (c *Client) CreateAsset(asset AssetMediaCreateDto) (*AssetMediaResponseDto, error) {
@@ -149,4 +179,36 @@ func (c *Client) DeleteAsset(assetId string) error {
 
 	_, err = c.doRequest(req)
 	return err
+}
+
+func (c *Client) GetAssetStatistics(isFavorite *bool, isTrashed *bool, visibility string) (*AssetStatsResponseDto, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/assets/statistics", c.Endpoint), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	if isFavorite != nil {
+		q.Add("isFavorite", fmt.Sprintf("%s", *isFavorite))
+	}
+	if isTrashed != nil {
+		q.Add("isTrashed", fmt.Sprintf("%s", *isTrashed))
+	}
+	if visibility != "" {
+		q.Add("visibility", visibility)
+	}
+	req.URL.RawQuery = q.Encode()
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *AssetStatsResponseDto
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
