@@ -20,8 +20,9 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
 	"time"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -42,7 +43,7 @@ func NewAlbumResource() resource.Resource {
 }
 
 type albumResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type albumResourceModel struct {
@@ -91,7 +92,7 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	album := client.CreateAlbumDto{
+	album := immichclient.CreateAlbumDto{
 		AlbumName:   plan.AlbumName.ValueString(),
 		Description: plan.Description.ValueString(),
 	}
@@ -154,7 +155,7 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	album := client.UpdateAlbumDto{
+	album := immichclient.UpdateAlbumDto{
 		AlbumName:   plan.AlbumName.ValueString(),
 		Description: plan.Description.ValueString(),
 		Order:       plan.Order.ValueString(),
@@ -206,12 +207,12 @@ func (r *albumResource) Configure(_ context.Context, req resource.ConfigureReque
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

@@ -21,7 +21,8 @@ import (
 	"context"
 	"fmt"
 	"regexp"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -44,7 +45,7 @@ func NewUserResource() resource.Resource {
 }
 
 type userResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type userResourceModel struct {
@@ -141,7 +142,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	user := client.UserAdminCreateDto{
+	user := immichclient.UserAdminCreateDto{
 		Name:                 plan.Name.ValueString(),
 		Email:                plan.Email.ValueString(),
 		Password:             plan.Password.ValueString(),
@@ -210,7 +211,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	user := client.UserAdminUpdateDto{
+	user := immichclient.UserAdminUpdateDto{
 		Name:                 plan.Name.ValueString(),
 		Email:                plan.Email.ValueString(),
 		Password:             plan.Password.ValueString(),
@@ -265,12 +266,12 @@ func (r *userResource) Configure(_ context.Context, req resource.ConfigureReques
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

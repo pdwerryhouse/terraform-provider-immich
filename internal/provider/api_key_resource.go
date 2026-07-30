@@ -20,7 +20,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -41,7 +42,7 @@ func NewApiKeyResource() resource.Resource {
 }
 
 type apiKeyResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type apiKeyResourceModel struct {
@@ -107,7 +108,7 @@ func (r *apiKeyResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	apiKey := client.ApiKeyCreateDto{
+	apiKey := immichclient.ApiKeyCreateDto{
 		Name:        plan.Name.ValueString(),
 		Permissions: permissions,
 	}
@@ -189,7 +190,7 @@ func (r *apiKeyResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	apiKey := client.ApiKeyUpdateDto{
+	apiKey := immichclient.ApiKeyUpdateDto{
 		Name:        plan.Name.ValueString(),
 		Permissions: permissions,
 	}
@@ -245,12 +246,12 @@ func (r *apiKeyResource) Configure(_ context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

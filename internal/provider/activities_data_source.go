@@ -21,11 +21,11 @@ import (
 	"context"
 	"fmt"
 
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"terraform-provider-immich/internal/client"
 )
 
 var (
@@ -38,7 +38,7 @@ func NewActivitiesDataSource() datasource.DataSource {
 }
 
 type ActivityDataSource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type ActivityDataSourceModel struct {
@@ -101,11 +101,11 @@ func (d *ActivityDataSource) Configure(_ context.Context, req datasource.Configu
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider develops.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider develops.", req.ProviderData),
 		)
 
 		return

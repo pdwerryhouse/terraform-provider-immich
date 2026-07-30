@@ -21,7 +21,7 @@ package provider
 //	"context"
 //	"fmt"
 //	"regexp"
-//	"terraform-provider-immich/internal/client"
+//	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 //
 //	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 //	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -42,7 +42,7 @@ package provider
 //}
 //
 //type albumOrderResource struct {
-//	client *client.Client
+//	client *immichclient.Client
 //}
 //
 //type albumOrderResourceModel struct {
@@ -173,12 +173,12 @@ package provider
 //		return
 //	}
 //
-//	client, ok := req.ProviderData.(*client.Client)
+//	client, ok := req.ProviderData.(*immichclient.Client)
 //
 //	if !ok {
 //		resp.Diagnostics.AddError(
 //			"Unexpected Resource Configure Type",
-//			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+//			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 //		)
 //
 //		return

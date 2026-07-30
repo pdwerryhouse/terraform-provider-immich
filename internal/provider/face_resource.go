@@ -20,7 +20,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -41,7 +42,7 @@ func NewFaceResource() resource.Resource {
 }
 
 type faceResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type faceResourceModel struct {
@@ -131,7 +132,7 @@ func (r *faceResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	face := client.AssetFaceCreateDto{
+	face := immichclient.AssetFaceCreateDto{
 		AssetId:     plan.AssetId.ValueString(),
 		Height:      plan.Height.ValueInt64(),
 		Width:       plan.Width.ValueInt64(),
@@ -222,12 +223,12 @@ func (r *faceResource) Configure(_ context.Context, req resource.ConfigureReques
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

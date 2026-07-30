@@ -20,7 +20,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -42,7 +43,7 @@ func NewTagResource() resource.Resource {
 }
 
 type tagResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type tagResourceModel struct {
@@ -88,7 +89,7 @@ func (r *tagResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
-	tag := client.TagCreateDto{
+	tag := immichclient.TagCreateDto{
 		Name:     plan.Name.ValueString(),
 		Color:    plan.Color.ValueString(),
 		ParentId: plan.ParentId.ValueString(),
@@ -151,7 +152,7 @@ func (r *tagResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		return
 	}
 
-	tag := client.TagUpdateDto{
+	tag := immichclient.TagUpdateDto{
 		Color: plan.Color.ValueString(),
 	}
 
@@ -198,12 +199,12 @@ func (r *tagResource) Configure(_ context.Context, req resource.ConfigureRequest
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

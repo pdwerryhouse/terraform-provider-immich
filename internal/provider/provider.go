@@ -28,7 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"terraform-provider-immich/internal/client"
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 )
 
 var (
@@ -135,7 +135,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		return
 	}
 
-	c, err := client.NewClient(&endpoint, &apikey)
+	c, err := immichclient.NewClient(&endpoint, &apikey)
 
 	// XXX improve this
 	if err != nil {

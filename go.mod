@@ -9,10 +9,10 @@ require (
 	github.com/hashicorp/terraform-plugin-framework-validators v0.19.0
 	github.com/hashicorp/terraform-plugin-go v0.31.0
 	github.com/hashicorp/terraform-plugin-testing v1.16.0
-	github.com/stretchr/testify v1.11.1
 )
 
 require (
+	codeberg.org/pdwerryhouse/immich-client-go v0.0.1 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/AlecAivazis/survey/v2 v2.3.7 // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect
@@ -30,7 +30,6 @@ require (
 	github.com/cli/go-gh/v2 v2.13.0 // indirect
 	github.com/cli/safeexec v1.0.0 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
@@ -89,7 +88,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/oklog/run v1.2.0 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/posener/complete v1.2.3 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/samber/lo v1.53.0 // indirect

@@ -25,7 +25,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"terraform-provider-immich/internal/client"
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 )
 
 var (
@@ -38,7 +38,7 @@ func NewUsersDataSource() datasource.DataSource {
 }
 
 type usersDataSource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type usersDataSourceModel struct {
@@ -100,11 +100,11 @@ func (d *usersDataSource) Configure(_ context.Context, req datasource.ConfigureR
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider develops.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider develops.", req.ProviderData),
 		)
 
 		return

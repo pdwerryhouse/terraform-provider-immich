@@ -20,7 +20,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -41,7 +42,7 @@ func NewLibraryResource() resource.Resource {
 }
 
 type libraryResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type libraryResourceModel struct {
@@ -107,7 +108,7 @@ func (r *libraryResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	library := client.CreateLibraryDto{
+	library := immichclient.CreateLibraryDto{
 		ExclusionPatterns: exclusionPatterns,
 		ImportPaths:       importPaths,
 		Name:              plan.Name.ValueString(),
@@ -207,7 +208,7 @@ func (r *libraryResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	library := client.UpdateLibraryDto{
+	library := immichclient.UpdateLibraryDto{
 		ExclusionPatterns: ExclusionPatterns,
 		ImportPaths:       ImportPaths,
 		Name:              plan.Name.ValueString(),
@@ -268,12 +269,12 @@ func (r *libraryResource) Configure(_ context.Context, req resource.ConfigureReq
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return

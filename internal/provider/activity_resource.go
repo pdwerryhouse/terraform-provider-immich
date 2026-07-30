@@ -20,7 +20,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"terraform-provider-immich/internal/client"
+
+	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -42,7 +43,7 @@ func NewActivityResource() resource.Resource {
 }
 
 type activityResource struct {
-	client *client.Client
+	client *immichclient.Client
 }
 
 type activityResourceModel struct {
@@ -112,7 +113,7 @@ func (r *activityResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	activity := client.ActivityCreateDto{
+	activity := immichclient.ActivityCreateDto{
 		AlbumId: plan.AlbumId.ValueString(),
 		AssetId: plan.AssetId.ValueString(),
 		Comment: plan.Comment.ValueString(),
@@ -186,12 +187,12 @@ func (r *activityResource) Configure(_ context.Context, req resource.ConfigureRe
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	client, ok := req.ProviderData.(*immichclient.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *client.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developer.", req.ProviderData),
 		)
 
 		return
