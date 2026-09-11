@@ -67,7 +67,7 @@ func (d *ActivityDataSource) Read(ctx context.Context, req datasource.ReadReques
 		return
 	}
 
-	Activity, err := d.client.GetActivities(state.AlbumId.ValueString())
+	Activity, err := d.client.GetActivities(state.AlbumId.ValueString(), nil, nil, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Activity",
@@ -82,7 +82,7 @@ func (d *ActivityDataSource) Read(ctx context.Context, req datasource.ReadReques
 			AssetId:   types.StringValue(activity.AssetId),
 			CreatedAt: types.StringValue(activity.CreatedAt),
 			Comment:   types.StringValue(activity.Comment),
-			Type:      types.StringValue(activity.Type),
+			Type:      types.StringValue(string(activity.Type)),
 		}
 
 		state.Activities = append(state.Activities, activityState)

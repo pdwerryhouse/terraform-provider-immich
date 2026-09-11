@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -61,7 +62,7 @@ func (d *peopleDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *peopleDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state peopleDataSourceModel
 
-	people, err := d.client.GetPeople()
+	people, err := d.client.GetAllPeople(nil, nil, nil, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Person",
@@ -70,7 +71,7 @@ func (d *peopleDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		return
 	}
 
-	for _, person := range people {
+	for _, person := range people.People {
 		peopletate := peopleModel{
 			ID:            types.StringValue(person.Id),
 			Name:          types.StringValue(person.Name),

@@ -64,7 +64,7 @@ func (d *LibraryDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *LibraryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state LibraryDataSourceModel
 
-	Library, err := d.client.GetLibraries()
+	Library, err := d.client.GetAllLibraries()
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Library",

@@ -68,7 +68,7 @@ func (d *albumsDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *albumsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state albumsDataSourceModel
 
-	albums, err := d.client.GetAlbums()
+	albums, err := d.client.GetAllAlbums()
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Album",

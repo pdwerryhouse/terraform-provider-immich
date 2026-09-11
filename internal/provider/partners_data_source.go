@@ -62,7 +62,7 @@ func (d *PartnerDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *PartnerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state PartnerDataSourceModel
 
-	Partner, err := d.client.GetPartners()
+	Partner, err := d.client.GetPartners(immichclient.PartnerDirectionsharedby)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Partner",
@@ -73,7 +73,7 @@ func (d *PartnerDataSource) Read(ctx context.Context, req datasource.ReadRequest
 
 	for _, partner := range Partner {
 		partnerState := PartnerModel{
-			AvatarColor:      types.StringValue(partner.AvatarColor),
+			AvatarColor:      types.StringValue(string(partner.AvatarColor)),
 			Email:            types.StringValue(partner.Email),
 			Id:               types.StringValue(partner.Id),
 			InTimeline:       types.BoolValue(partner.InTimeline),

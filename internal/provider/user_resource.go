@@ -155,7 +155,7 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		AvatarColor:          plan.AvatarColor.ValueString(),
 	}
 
-	newUser, err := r.client.CreateUser(user)
+	newUser, err := r.client.CreateUserAdmin(user)
 
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -223,7 +223,7 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		AvatarColor:          plan.AvatarColor.ValueString(),
 	}
 
-	updatedUser, err := r.client.UpdateUser(plan.ID.ValueString(), user)
+	updatedUser, err := r.client.UpdateUserAdmin(plan.ID.ValueString(), user)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Updating Immich Album",
@@ -251,7 +251,7 @@ func (r *userResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
-	err := r.client.DeleteUser(state.ID.ValueString())
+	err := r.client.DeleteUserAdmin(state.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Immich User",

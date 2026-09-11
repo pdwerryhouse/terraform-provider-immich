@@ -127,7 +127,7 @@ func (r *albumResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	album, err := r.client.GetAlbum(state.ID.ValueString())
+	album, err := r.client.GetAlbumInfo(state.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Album",
@@ -161,7 +161,7 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		Order:       plan.Order.ValueString(),
 	}
 
-	updatedAlbum, err := r.client.UpdateAlbum(plan.ID.ValueString(), album)
+	updatedAlbum, err := r.client.UpdateAlbumInfo(plan.ID.ValueString(), album)
 
 	if err != nil {
 		resp.Diagnostics.AddError(

@@ -115,9 +115,9 @@ func (r *activityResource) Create(ctx context.Context, req resource.CreateReques
 
 	activity := immichclient.ActivityCreateDto{
 		AlbumId: plan.AlbumId.ValueString(),
-		AssetId: plan.AssetId.ValueString(),
-		Comment: plan.Comment.ValueString(),
-		Type:    plan.Type.ValueString(),
+		AssetId: plan.AssetId.ValueStringPointer(),
+		Comment: plan.Comment.ValueStringPointer(),
+		Type:    immichclient.ReactionType(plan.Type.ValueString()),
 	}
 
 	newActivity, err := r.client.CreateActivity(activity)
@@ -133,7 +133,7 @@ func (r *activityResource) Create(ctx context.Context, req resource.CreateReques
 	plan.AssetId = types.StringValue(newActivity.AssetId)
 	plan.Comment = types.StringValue(newActivity.Comment)
 	plan.CreatedAt = types.StringValue(newActivity.CreatedAt)
-	plan.Type = types.StringValue(newActivity.Type)
+	plan.Type = types.StringValue(string(newActivity.Type))
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

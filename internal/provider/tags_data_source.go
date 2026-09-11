@@ -62,7 +62,7 @@ func (d *tagsDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *tagsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state tagsDataSourceModel
 
-	tags, err := d.client.GetTags()
+	tags, err := d.client.GetAllTags()
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Tag",

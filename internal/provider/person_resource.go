@@ -104,11 +104,11 @@ func (r *personResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 
 	person := immichclient.PersonCreateDto{
-		BirthDate:  plan.BirthDate.ValueString(),
-		Color:      plan.Color.ValueString(),
-		IsFavorite: plan.IsFavorite.ValueBool(),
-		IsHidden:   plan.IsHidden.ValueBool(),
-		Name:       plan.Name.ValueString(),
+		BirthDate:  plan.BirthDate.ValueStringPointer(),
+		Color:      plan.Color.ValueStringPointer(),
+		IsFavorite: plan.IsFavorite.ValueBoolPointer(),
+		IsHidden:   plan.IsHidden.ValueBoolPointer(),
+		Name:       plan.Name.ValueStringPointer(),
 	}
 
 	newPerson, err := r.client.CreatePerson(person)
@@ -173,11 +173,11 @@ func (r *personResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 
 	person := immichclient.PersonUpdateDto{
-		BirthDate:  plan.BirthDate.ValueString(),
-		Color:      plan.Color.ValueString(),
-		IsFavorite: plan.IsFavorite.ValueBool(),
-		IsHidden:   plan.IsHidden.ValueBool(),
-		Name:       plan.Name.ValueString(),
+		BirthDate:  plan.BirthDate.ValueStringPointer(),
+		Color:      plan.Color.ValueStringPointer(),
+		IsFavorite: plan.IsFavorite.ValueBoolPointer(),
+		IsHidden:   plan.IsHidden.ValueBoolPointer(),
+		Name:       plan.Name.ValueStringPointer(),
 	}
 
 	updatedPerson, err := r.client.UpdatePerson(plan.ID.ValueString(), person)

@@ -124,7 +124,7 @@ func (r *tagResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
-	tag, err := r.client.GetTag(state.ID.ValueString())
+	tag, err := r.client.GetTagById(state.ID.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Tag",
