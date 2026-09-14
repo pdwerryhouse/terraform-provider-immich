@@ -146,13 +146,13 @@ func (r *userResource) Create(ctx context.Context, req resource.CreateRequest, r
 		Name:                 plan.Name.ValueString(),
 		Email:                plan.Email.ValueString(),
 		Password:             plan.Password.ValueString(),
-		IsAdmin:              plan.IsAdmin.ValueBool(),
-		Notify:               plan.Notify.ValueBool(),
-		QuotaSizeInBytes:     plan.QuotaSizeInBytes.ValueInt64(),
-		StorageLabel:         plan.StorageLabel.ValueString(),
-		ShouldChangePassword: plan.ShouldChangePassword.ValueBool(),
-		PinCode:              plan.PinCode.ValueString(),
-		AvatarColor:          plan.AvatarColor.ValueString(),
+		IsAdmin:              plan.IsAdmin.ValueBoolPointer(),
+		Notify:               plan.Notify.ValueBoolPointer(),
+		QuotaSizeInBytes:     plan.QuotaSizeInBytes.ValueInt64Pointer(),
+		StorageLabel:         plan.StorageLabel.ValueStringPointer(),
+		ShouldChangePassword: plan.ShouldChangePassword.ValueBoolPointer(),
+		PinCode:              plan.PinCode.ValueStringPointer(),
+		AvatarColor:          plan.AvatarColor.ValueStringPointer(),
 	}
 
 	newUser, err := r.client.CreateUserAdmin(user)
@@ -212,15 +212,15 @@ func (r *userResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 
 	user := immichclient.UserAdminUpdateDto{
-		Name:                 plan.Name.ValueString(),
-		Email:                plan.Email.ValueString(),
-		Password:             plan.Password.ValueString(),
-		IsAdmin:              plan.IsAdmin.ValueBool(),
-		QuotaSizeInBytes:     plan.QuotaSizeInBytes.ValueInt64(),
-		StorageLabel:         plan.StorageLabel.ValueString(),
-		ShouldChangePassword: plan.ShouldChangePassword.ValueBool(),
-		PinCode:              plan.PinCode.ValueString(),
-		AvatarColor:          plan.AvatarColor.ValueString(),
+		Name:                 plan.Name.ValueStringPointer(),
+		Email:                plan.Email.ValueStringPointer(),
+		Password:             plan.Password.ValueStringPointer(),
+		IsAdmin:              plan.IsAdmin.ValueBoolPointer(),
+		QuotaSizeInBytes:     plan.QuotaSizeInBytes.ValueInt64Pointer(),
+		StorageLabel:         plan.StorageLabel.ValueStringPointer(),
+		ShouldChangePassword: plan.ShouldChangePassword.ValueBoolPointer(),
+		PinCode:              plan.PinCode.ValueStringPointer(),
+		AvatarColor:          plan.AvatarColor.ValueStringPointer(),
 	}
 
 	updatedUser, err := r.client.UpdateUserAdmin(plan.ID.ValueString(), user)

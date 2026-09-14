@@ -101,7 +101,8 @@ func (r *apiKeyResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	var permissions []string
+	var permissions []immichclient.Permission
+
 	diags = plan.Permissions.ElementsAs(ctx, &permissions, false)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -109,7 +110,7 @@ func (r *apiKeyResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 
 	apiKey := immichclient.ApiKeyCreateDto{
-		Name:        plan.Name.ValueString(),
+		Name:        plan.Name.ValueStringPointer(),
 		Permissions: permissions,
 	}
 
@@ -183,7 +184,8 @@ func (r *apiKeyResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	var permissions []string
+	var permissions []immichclient.Permission
+
 	diags = plan.Permissions.ElementsAs(ctx, &permissions, false)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -191,8 +193,8 @@ func (r *apiKeyResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 
 	apiKey := immichclient.ApiKeyUpdateDto{
-		Name:        plan.Name.ValueString(),
-		Permissions: permissions,
+		Name:        plan.Name.ValueStringPointer(),
+		Permissions: &permissions,
 	}
 
 	updatedApiKey, err := r.client.UpdateApiKey(plan.ID.ValueString(), apiKey)

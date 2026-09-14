@@ -94,7 +94,7 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 
 	album := immichclient.CreateAlbumDto{
 		AlbumName:   plan.AlbumName.ValueString(),
-		Description: plan.Description.ValueString(),
+		Description: plan.Description.ValueStringPointer(),
 	}
 
 	newAlbum, err := r.client.CreateAlbum(album)
@@ -155,10 +155,12 @@ func (r *albumResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
+	order := immichclient.AssetOrder((plan.Order.ValueString)())
+
 	album := immichclient.UpdateAlbumDto{
-		AlbumName:   plan.AlbumName.ValueString(),
-		Description: plan.Description.ValueString(),
-		Order:       plan.Order.ValueString(),
+		AlbumName:   plan.AlbumName.ValueStringPointer(),
+		Description: plan.Description.ValueStringPointer(),
+		Order:       &order,
 	}
 
 	updatedAlbum, err := r.client.UpdateAlbumInfo(plan.ID.ValueString(), album)

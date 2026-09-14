@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	codeberg.org/pdwerryhouse/immich-client-go v0.0.25 // indirect
+	codeberg.org/pdwerryhouse/immich-client-go v0.0.27 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/AlecAivazis/survey/v2 v2.3.7 // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect

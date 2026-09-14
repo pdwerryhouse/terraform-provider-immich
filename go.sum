@@ -4,6 +4,8 @@ codeberg.org/pdwerryhouse/immich-client-go v0.0.20 h1:LUKfiSjO0211mA9ysdP8IhxDsv
 codeberg.org/pdwerryhouse/immich-client-go v0.0.20/go.mod h1:Aed5lYzLFyaH0m6Xqog266EubSf/4Q8AKIZ1SRImh5A=
 codeberg.org/pdwerryhouse/immich-client-go v0.0.25 h1:BiBgCKbNnb5ZhEDrJWDS/xeF5hbokrCkUfGCzuyFIHs=
 codeberg.org/pdwerryhouse/immich-client-go v0.0.25/go.mod h1:Aed5lYzLFyaH0m6Xqog266EubSf/4Q8AKIZ1SRImh5A=
+codeberg.org/pdwerryhouse/immich-client-go v0.0.27 h1:u1TRQ4d/fJ9BWtVsbnrL15PDBGb0/mLP6mjM8klB9kw=
+codeberg.org/pdwerryhouse/immich-client-go v0.0.27/go.mod h1:Aed5lYzLFyaH0m6Xqog266EubSf/4Q8AKIZ1SRImh5A=
 dario.cat/mergo v1.0.1 h1:Ra4+bf83h2ztPIQYNP99R6m+Y7KfnARDfID+a+vLl4s=
 dario.cat/mergo v1.0.1/go.mod h1:uNxQE+84aUszobStD9th8a29P2fMDhsBdgRYvZOxGmk=
 github.com/AlecAivazis/survey/v2 v2.3.7 h1:6I/u8FvytdGsgonrYsVn2t8t4QiRnh6QSTqkkhIiSjQ=

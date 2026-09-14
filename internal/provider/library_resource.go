@@ -109,9 +109,9 @@ func (r *libraryResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	library := immichclient.CreateLibraryDto{
-		ExclusionPatterns: exclusionPatterns,
-		ImportPaths:       importPaths,
-		Name:              plan.Name.ValueString(),
+		ExclusionPatterns: &exclusionPatterns,
+		ImportPaths:       &importPaths,
+		Name:              plan.Name.ValueStringPointer(),
 		OwnerId:           plan.OwnerId.ValueString(),
 	}
 
@@ -209,9 +209,9 @@ func (r *libraryResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	library := immichclient.UpdateLibraryDto{
-		ExclusionPatterns: ExclusionPatterns,
-		ImportPaths:       ImportPaths,
-		Name:              plan.Name.ValueString(),
+		ExclusionPatterns: &ExclusionPatterns,
+		ImportPaths:       &ImportPaths,
+		Name:              plan.Name.ValueStringPointer(),
 	}
 
 	updatedLibrary, err := r.client.UpdateLibrary(plan.ID.ValueString(), library)

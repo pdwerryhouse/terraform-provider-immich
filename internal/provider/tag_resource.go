@@ -91,8 +91,8 @@ func (r *tagResource) Create(ctx context.Context, req resource.CreateRequest, re
 
 	tag := immichclient.TagCreateDto{
 		Name:     plan.Name.ValueString(),
-		Color:    plan.Color.ValueString(),
-		ParentId: plan.ParentId.ValueString(),
+		Color:    plan.Color.ValueStringPointer(),
+		ParentId: plan.ParentId.ValueStringPointer(),
 	}
 
 	newTag, err := r.client.CreateTag(tag)
@@ -153,7 +153,7 @@ func (r *tagResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	tag := immichclient.TagUpdateDto{
-		Color: plan.Color.ValueString(),
+		Color: plan.Color.ValueStringPointer(),
 	}
 
 	updatedTag, err := r.client.UpdateTag(plan.ID.ValueString(), tag)
@@ -167,7 +167,7 @@ func (r *tagResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	plan.ID = types.StringValue(updatedTag.Id)
-	plan.Color = types.StringValue(tag.Color)
+	plan.Color = types.StringValue(*tag.Color)
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
