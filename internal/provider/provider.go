@@ -174,6 +174,7 @@ func (p *immichProvider) Resources(ctx context.Context) []func() resource.Resour
 	return []func() resource.Resource{
 		NewActivityResource,
 		NewAlbumResource,
+		NewAssetResource,
 		//NewAlbumActivityResource,
 		//NewAlbumOrderResource,
 		NewApiKeyResource,
