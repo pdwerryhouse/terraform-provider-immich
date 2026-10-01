@@ -124,14 +124,6 @@ func (r *partnerResource) Read(ctx context.Context, req resource.ReadRequest, re
 		}
 	}
 
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Error Reading Partner",
-			"Could not read Immich partner ID "+state.ID.ValueString()+": "+err.Error(),
-		)
-		return
-	}
-
 	state.ID = partnerState.ID
 
 	diags = resp.State.Set(ctx, &state)
