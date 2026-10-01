@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -76,6 +77,7 @@ func (r *albumResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			"order": schema.StringAttribute{
 				Optional: true,
 				Computed: true,
+				Default:  stringdefault.StaticString("desc"),
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
@@ -104,6 +106,23 @@ func (r *albumResource) Create(ctx context.Context, req resource.CreateRequest, 
 			"Could not create album, unexpected error: "+err.Error(),
 		)
 		return
+	}
+
+	if !plan.Order.IsUnknown() && !plan.Order.IsNull() {
+		update := immichclient.UpdateAlbumDto{
+			Order: getPointer(immichclient.AssetOrder(plan.Order.ValueString())),
+		}
+		updatedAlbum, err := r.client.UpdateAlbumInfo(newAlbum.Id, update)
+
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Error updating album",
+				"Could not update album, unexpected error: "+err.Error(),
+			)
+			return
+		}
+
+		newAlbum.Order = updatedAlbum.Order
 	}
 
 	plan.ID = types.StringValue(newAlbum.Id)
