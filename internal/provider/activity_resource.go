@@ -27,7 +27,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -79,7 +78,7 @@ func (r *activityResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Optional:    true,
 				Computed:    true,
 				Description: "Asset Id",
-				Default:     stringdefault.StaticString(""),
+				Default:     nil,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -113,9 +112,16 @@ func (r *activityResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	var assetId *string
+
+	if !plan.AssetId.IsNull() && !plan.AssetId.IsUnknown() {
+		val := plan.AssetId.ValueString()
+		assetId = &val
+	}
+
 	activity := immichclient.ActivityCreateDto{
 		AlbumId: plan.AlbumId.ValueString(),
-		AssetId: plan.AssetId.ValueStringPointer(),
+		AssetId: assetId,
 		Comment: plan.Comment.ValueStringPointer(),
 		Type:    immichclient.ReactionType(plan.Type.ValueString()),
 	}
