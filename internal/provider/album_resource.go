@@ -127,7 +127,7 @@ func (r *albumResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	album, err := r.client.GetAlbumInfo(state.ID.ValueString())
+	album, err := r.client.GetAlbumInfo(state.ID.ValueString(), nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Reading Album",

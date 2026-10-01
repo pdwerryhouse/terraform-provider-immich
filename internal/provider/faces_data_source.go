@@ -72,7 +72,11 @@ func (d *FaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	Face, err := d.client.GetFaces(state.AssetId.ValueString())
+	faceParams := immichclient.GetFacesParameters{
+		Id: state.AssetId.String(),
+	}
+
+	Face, err := d.client.GetFaces(faceParams)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Face",

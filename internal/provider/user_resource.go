@@ -251,7 +251,11 @@ func (r *userResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
-	err := r.client.DeleteUserAdmin(state.ID.ValueString())
+	force := immichclient.UserAdminDeleteDto{
+		Force: getPointer(true),
+	}
+
+	_, err := r.client.DeleteUserAdmin(state.ID.ValueString(), &force)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error Deleting Immich User",

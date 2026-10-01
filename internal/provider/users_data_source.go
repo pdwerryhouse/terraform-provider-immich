@@ -63,7 +63,7 @@ func (d *usersDataSource) Metadata(_ context.Context, req datasource.MetadataReq
 func (d *usersDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state usersDataSourceModel
 
-	users, err := d.client.SearchUsersAdmin()
+	users, err := d.client.SearchUsersAdmin(nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich User",
@@ -77,7 +77,7 @@ func (d *usersDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 			ID:        types.StringValue(user.Id),
 			Name:      types.StringValue(user.Name),
 			Email:     types.StringValue(user.Email),
-			Status:    types.StringValue(user.Status),
+			Status:    types.StringValue(string(user.Status)),
 			IsAdmin:   types.BoolValue(user.IsAdmin),
 			CreatedAt: types.StringValue(user.CreatedAt),
 			UpdatedAt: types.StringValue(user.UpdatedAt),

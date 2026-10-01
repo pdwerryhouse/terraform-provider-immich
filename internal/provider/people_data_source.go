@@ -62,7 +62,7 @@ func (d *peopleDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *peopleDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state peopleDataSourceModel
 
-	people, err := d.client.GetAllPeople(nil, nil, nil, nil, nil)
+	people, err := d.client.GetAllPeople(nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Person",

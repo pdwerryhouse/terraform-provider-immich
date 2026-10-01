@@ -104,7 +104,7 @@ func (r *partnerResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	Partner, err := r.client.GetPartners(immichclient.PartnerDirectionsharedby)
+	Partner, err := r.client.GetPartners(immichclient.GetPartnersParameters{Direction: immichclient.PartnerDirectionSharedBy})
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Partner",

@@ -106,7 +106,7 @@ func (r *assetResource) Create(ctx context.Context, req resource.CreateRequest, 
 		FileModifiedAt: plan.FileModifiedAt.ValueString(),
 	}
 
-	newAsset, err := r.client.UploadAsset(asset)
+	newAsset, err := r.client.UploadAsset(asset, nil)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error creating asset",
@@ -132,7 +132,7 @@ func (r *assetResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	image, err := r.client.DownloadAsset(state.ID.ValueString(), nil, "", "")
+	image, err := r.client.DownloadAsset(state.ID.ValueString(), nil)
 
 	if err != nil {
 		resp.Diagnostics.AddError(

@@ -62,7 +62,7 @@ func (d *PartnerDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *PartnerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state PartnerDataSourceModel
 
-	Partner, err := d.client.GetPartners(immichclient.PartnerDirectionsharedby)
+	Partner, err := d.client.GetPartners(immichclient.GetPartnersParameters{Direction: immichclient.PartnerDirectionSharedBy})
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Partner",

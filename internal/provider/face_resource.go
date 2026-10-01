@@ -143,7 +143,7 @@ func (r *faceResource) Create(ctx context.Context, req resource.CreateRequest, r
 		PersonId:    plan.PersonId.ValueString(),
 	}
 
-	newFace, err := r.client.CreateFace(face)
+	err := r.client.CreateFace(face)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error creating face",
@@ -152,12 +152,8 @@ func (r *faceResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	plan.ID = types.StringValue(newFace.Id)
-	plan.BoundingBoxX1 = types.Int64Value(newFace.BoundingBoxX1)
-	plan.BoundingBoxX2 = types.Int64Value(newFace.BoundingBoxX2)
-	plan.BoundingBoxY1 = types.Int64Value(newFace.BoundingBoxY1)
-	plan.BoundingBoxY2 = types.Int64Value(newFace.BoundingBoxY2)
-	plan.SourceType = types.StringValue(newFace.SourceType)
+	// XXX CreateFace does not return any data so we can't do anything at the moment
+	// need to find a fix for this
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

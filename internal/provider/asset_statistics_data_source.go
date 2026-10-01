@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -68,7 +69,13 @@ func (d *assetStatisticsDataSource) Read(ctx context.Context, req datasource.Rea
 		isTrashed = &v
 	}
 
-	assetStatistics, err := d.client.GetAssetStatistics(isFavorite, isTrashed, state.Visibility.ValueString())
+	getAssetStatsParams := immichclient.GetAssetStatisticsParameters{
+		IsFavorite: isFavorite,
+		IsTrashed:  isTrashed,
+		Visibility: (*immichclient.AssetVisibility)(state.Visibility.ValueStringPointer()),
+	}
+
+	assetStatistics, err := d.client.GetAssetStatistics(&getAssetStatsParams)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich User",

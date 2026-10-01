@@ -67,7 +67,11 @@ func (d *ActivityDataSource) Read(ctx context.Context, req datasource.ReadReques
 		return
 	}
 
-	Activity, err := d.client.GetActivities(state.AlbumId.ValueString(), nil, nil, nil, nil)
+	getActivitiesParms := immichclient.GetActivitiesParameters{
+		AlbumId: state.AlbumId.ValueString(),
+	}
+
+	Activity, err := d.client.GetActivities(&getActivitiesParms)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Activity",

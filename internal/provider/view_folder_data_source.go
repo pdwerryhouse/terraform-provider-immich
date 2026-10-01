@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -90,7 +91,11 @@ func (d *viewFolderPathDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 
-	assets, err := d.client.GetAssetsByOriginalPath(state.Path.ValueString())
+	params := immichclient.GetAssetsByOriginalPathParameters{
+		Path: state.Path.ValueString(),
+	}
+
+	assets, err := d.client.GetAssetsByOriginalPath(params)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to Read Immich Assets",
