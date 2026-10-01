@@ -85,7 +85,9 @@ func (r *activityResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			},
 			"comment": schema.StringAttribute{
 				Optional:    true,
+				Computed:    true,
 				Description: "Comment Text",
+				Default:     nil,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
