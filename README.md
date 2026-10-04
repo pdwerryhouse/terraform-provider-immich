@@ -19,6 +19,12 @@
 
 # Terraform Provider for Immich
 
+## Repository
+
+The main repository for this code is at [https://codeberg.org/pdwerryhouse/terraform-provider-immich](codeberg).
+
+The github repository is only to allow access to the Hashicorp registry.
+
 ## Installation
 
 ```terraform
