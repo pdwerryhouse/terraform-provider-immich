@@ -61,6 +61,7 @@ func (r *albumResource) Metadata(_ context.Context, req resource.MetadataRequest
 
 func (r *albumResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Create an Immich Album",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -69,18 +70,22 @@ func (r *albumResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				},
 			},
 			"album_name": schema.StringAttribute{
-				Required: true,
+				Description: "The name of the album.",
+				Required:    true,
 			},
 			"description": schema.StringAttribute{
-				Optional: true,
+				Description: "The album's description.",
+				Optional:    true,
 			},
 			"order": schema.StringAttribute{
-				Optional: true,
-				Computed: true,
-				Default:  stringdefault.StaticString("desc"),
+				Description: "The album order: desc or asc. Default is desc.",
+				Optional:    true,
+				Computed:    true,
+				Default:     stringdefault.StaticString("desc"),
 			},
 			"last_updated": schema.StringAttribute{
-				Computed: true,
+				Description: "The time when the album was last updated.",
+				Computed:    true,
 			},
 		},
 	}

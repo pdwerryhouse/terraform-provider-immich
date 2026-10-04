@@ -115,34 +115,43 @@ func (d *usersDataSource) Configure(_ context.Context, req datasource.ConfigureR
 
 func (d *usersDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Fetches the list of users.",
 		Attributes: map[string]schema.Attribute{
 			"users": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
-							Computed: true,
+							Description: "User Id.",
+							Computed:    true,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Description: "The name of the user.",
+							Computed:    true,
 						},
 						"email": schema.StringAttribute{
-							Computed: true,
+							Description: "The user's email address.",
+							Computed:    true,
 						},
 						"is_admin": schema.BoolAttribute{
-							Computed: true,
+							Description: "If true, the user is an administrator.",
+							Computed:    true,
 						},
 						"status": schema.StringAttribute{
-							Computed: true,
+							Description: "The user's status.",
+							Computed:    true,
 						},
 						"created_at": schema.StringAttribute{
-							Computed: true,
+							Description: "The date when the user was created.",
+							Computed:    true,
 						},
 						"updated_at": schema.StringAttribute{
-							Computed: true,
+							Description: "The date when the user was last modified.",
+							Computed:    true,
 						},
 						"deleted_at": schema.StringAttribute{
-							Computed: true,
+							Description: "The date when the user was deleted.",
+							Computed:    true,
 						},
 					},
 				},

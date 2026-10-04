@@ -117,7 +117,6 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "The user's avatar colour. Valid choices: primary, pink, red, yellow, blue, green, purple, orange, gray, amber.",
 				Optional:    true,
 				Validators: []validator.String{
-					// These are example validators from terraform-plugin-framework-validators
 					stringvalidator.RegexMatches(
 						regexp.MustCompile(`^(primary|pink|red|yellow|blue|green|purple|orange|gray|amber)$`),
 						"must be 'primary', 'pink', 'red', 'yellow', 'blue', 'green', 'purple, 'orange', 'gray', 'amber'.",

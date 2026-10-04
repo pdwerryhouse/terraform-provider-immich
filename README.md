@@ -17,7 +17,37 @@
  along with terraform-provider-immich.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-# Testing
+# Terraform Provider for Immich
+
+## Installation
+
+```terraform
+terraform {
+  required_providers {
+    immich = {
+      source  = "pdwerryhouse/immich"
+      version = "~> 0.0.1"
+    }
+  }
+}
+```
+
+## Usage
+
+```terraform
+
+provider "immich" {
+  endpoint = "http://localhost:2283/api"
+  apikey   = "some_api_key"
+}
+
+resource "immich_album" "test" {
+  album_name  = "Test"
+  description = "Test Album"
+}
+```
+
+## Testing
 
 To run tests, set the IMMICH_ENDPOINT and IMMICH_API_KEY environment variables:
 
@@ -32,3 +62,7 @@ Then run the following:
 ```bash
 TF_ACC=1 go test -count=1 -v ./...
 ```
+
+## Licence
+
+GNU GENERAL PUBLIC [LICENSE](LICENSE) V3 or later

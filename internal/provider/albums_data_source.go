@@ -123,49 +123,63 @@ func (d *albumsDataSource) Configure(_ context.Context, req datasource.Configure
 
 func (d *albumsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Fetches the list of albums.",
 		Attributes: map[string]schema.Attribute{
 			"albums": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
-							Computed: true,
+							Description: "Album Id.",
+							Computed:    true,
 						},
 						"album_name": schema.StringAttribute{
-							Computed: true,
+							Description: "The name of the album.",
+							Computed:    true,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Description: "The album's description.",
+							Computed:    true,
 						},
 						"shared": schema.BoolAttribute{
-							Computed: true,
+							Description: "If true, this is a shared album.",
+							Computed:    true,
 						},
 						"order": schema.StringAttribute{
-							Computed: true,
+							Description: "The album order: asc or desc.",
+							Computed:    true,
 						},
 						"album_thumbnail_asset_id": schema.StringAttribute{
-							Computed: true,
+							Description: "The id of the album's thumbnail asset.",
+							Computed:    true,
 						},
 						"has_shared_link": schema.BoolAttribute{
-							Computed: true,
+							Description: "If true, this album has a shared link.",
+							Computed:    true,
 						},
 						"is_activity_enabled": schema.BoolAttribute{
-							Computed: true,
+							Description: "If true, comments and likes can be left on the album.",
+							Computed:    true,
 						},
 						"created_at": schema.StringAttribute{
-							Computed: true,
+							Description: "Time at which the album was created.",
+							Computed:    true,
 						},
 						"updated_at": schema.StringAttribute{
-							Computed: true,
+							Description: "Time at which the album was last updated.",
+							Computed:    true,
 						},
 						"start_date": schema.StringAttribute{
-							Computed: true,
+							Description: "Date and time of earliest photo in the album.",
+							Computed:    true,
 						},
 						"end_date": schema.StringAttribute{
-							Computed: true,
+							Description: "Date and time of latest photo in the album.",
+							Computed:    true,
 						},
 						"owner_id": schema.StringAttribute{
-							Computed: true,
+							Description: "Id of the album's owner.",
+							Computed:    true,
 						},
 					},
 				},

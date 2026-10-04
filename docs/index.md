@@ -13,9 +13,8 @@ Terraform provider for Immich
 
 ```terraform
 provider "immich" {
-  username = "paul"
-  password = ")!'x.LDD4FVt$D3"
-  hostname = "https://localhost:2283"
+  endpoint = "http://localhost:2283/api"
+  apikey   = "some_api_key"
 }
 ```
 
@@ -24,5 +23,5 @@ provider "immich" {
 
 ### Optional
 
-- `apikey` (String, Sensitive) The Immich API Key. May also be provided via IMMICH_APIKEY.
+- `apikey` (String, Sensitive) The Immich API Key. May also be provided via IMMICH_API_KEY.
 - `endpoint` (String) The Immich API Endpoint. May also be provided via IMMICH_ENDPOINT.
