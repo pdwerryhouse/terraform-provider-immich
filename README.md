@@ -63,6 +63,14 @@ Then run the following:
 TF_ACC=1 go test -count=1 -v ./...
 ```
 
+## Contributing code
+
+LLM contributions are not welcome.
+
+## Bug reports
+
+LLM generated bug reports are not welcome.
+
 ## Licence
 
 GNU GENERAL PUBLIC [LICENSE](LICENSE) V3 or later
