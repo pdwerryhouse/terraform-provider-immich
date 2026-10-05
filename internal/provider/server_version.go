@@ -86,8 +86,8 @@ func (d *serverVersionDataSource) Configure(_ context.Context, req datasource.Co
 	client, ok := req.ProviderData.(*immichclient.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
-			"Unexpected Data Source Versionure Type",
-			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider develops.", req.ProviderData),
+			"Unexpected Data Source Version Type",
+			fmt.Sprintf("Expected *immichclient.Client, got %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
