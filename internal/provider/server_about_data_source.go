@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -130,69 +131,91 @@ func (d *serverAboutDataSource) Configure(_ context.Context, req datasource.Conf
 
 func (d *serverAboutDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Retrieves a list of information about the Immich server.",
 		Attributes: map[string]schema.Attribute{
 			"build": schema.StringAttribute{
-				Computed: true,
+				Description: "Build idenfier.",
+				Computed:    true,
 			},
 			"build_image": schema.StringAttribute{
-				Computed: true,
+				Description: "Build image name.",
+				Computed:    true,
 			},
 			"build_image_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Build image URL.",
+				Computed:    true,
 			},
 			"build_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Build URL.",
+				Computed:    true,
 			},
 			"exiftool": schema.StringAttribute{
-				Computed: true,
+				Description: "ExifTool version.",
+				Computed:    true,
 			},
 			"ffmpeg": schema.StringAttribute{
-				Computed: true,
+				Description: "FFmpeg version.",
+				Computed:    true,
 			},
 			"imagemagick": schema.StringAttribute{
-				Computed: true,
+				Description: "ImageMagick version.",
+				Computed:    true,
 			},
 			"libvips": schema.StringAttribute{
-				Computed: true,
+				Description: "libvips version.",
+				Computed:    true,
 			},
 			"licensed": schema.BoolAttribute{
-				Computed: true,
+				Description: "Is the server licenced.",
+				Computed:    true,
 			},
 			"nodejs": schema.StringAttribute{
-				Computed: true,
+				Description: "Node.js version.",
+				Computed:    true,
 			},
 			"repository": schema.StringAttribute{
-				Computed: true,
+				Description: "Repository name.",
+				Computed:    true,
 			},
 			"repository_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Repository URL.",
+				Computed:    true,
 			},
 			"source_commit": schema.StringAttribute{
-				Computed: true,
+				Description: "Source commit hash.",
+				Computed:    true,
 			},
 			"source_ref": schema.StringAttribute{
-				Computed: true,
+				Description: "Source reference.",
+				Computed:    true,
 			},
 			"source_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Source URL.",
+				Computed:    true,
 			},
 			"third_party_bug_feature_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Third-party bug/feature URL.",
+				Computed:    true,
 			},
 			"third_party_documentation_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Third-party source URL.",
+				Computed:    true,
 			},
 			"third_party_source_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Third-party source URL.",
+				Computed:    true,
 			},
 			"third_party_support_url": schema.StringAttribute{
-				Computed: true,
+				Description: "Third-party support URL",
+				Computed:    true,
 			},
 			"version": schema.StringAttribute{
-				Computed: true,
+				Description: "Server version.",
+				Computed:    true,
 			},
 			"version_url": schema.StringAttribute{
-				Computed: true,
+				Description: "URL to version information.",
+				Computed:    true,
 			},
 		},
 	}

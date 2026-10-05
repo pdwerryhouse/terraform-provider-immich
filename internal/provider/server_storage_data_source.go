@@ -103,28 +103,36 @@ func (d *serverStorageDataSource) Configure(_ context.Context, req datasource.Co
 
 func (d *serverStorageDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Retrieve the current storage utilization information from the Immich server.",
 		Attributes: map[string]schema.Attribute{
 
 			"disk_available": schema.StringAttribute{
-				Computed: true,
+				Description: "Available disk space (human readable format).",
+				Computed:    true,
 			},
 			"disk_available_raw": schema.Int64Attribute{
-				Computed: true,
+				Description: "Available disk space in bytes.",
+				Computed:    true,
 			},
 			"disk_size": schema.StringAttribute{
-				Computed: true,
+				Description: "Total disk size (human readable format).",
+				Computed:    true,
 			},
 			"disk_size_raw": schema.Int64Attribute{
-				Computed: true,
+				Description: "Total disk size in bytes.",
+				Computed:    true,
 			},
 			"disk_usage_percentage": schema.Float64Attribute{
-				Computed: true,
+				Description: "Disk usage percentage (0-100)",
+				Computed:    true,
 			},
 			"disk_use": schema.StringAttribute{
-				Computed: true,
+				Description: "Used disk space (human readable format).",
+				Computed:    true,
 			},
 			"disk_use_raw": schema.Int64Attribute{
-				Computed: true,
+				Description: "Used disk space in bytes.",
+				Computed:    true,
 			},
 		},
 	}
