@@ -21,13 +21,13 @@
 
 ## Repository
 
-The main repository for this code is at [https://codeberg.org/pdwerryhouse/terraform-provider-immich](codeberg).
+The main repository for this code is at [codeberg](https://codeberg.org/pdwerryhouse/terraform-provider-immich).
 
 The github repository is only to allow access to the Hashicorp registry.
 
 ## Introduction
 
-This is a Terraform provider for [https://immich.app/](Immich), the self-hosted photo and video management system. 
+This is a Terraform provider for [Immich](https://immich.app/), the self-hosted photo and video management system. 
 
 ## Installation
 
@@ -56,6 +56,10 @@ resource "immich_album" "test" {
   description = "Test Album"
 }
 ```
+
+## Documentation
+
+The documentation is available at the [Terraform Registry](https://registry.terraform.io/providers/pdwerryhouse/immich/latest/docs).
 
 ## Testing
 
