@@ -506,7 +506,7 @@ resource "immich_config" "config" {
 
 ## Development
 
-terraform-provider-immich uses (immich-client-go)[https://codeberg.org/pdwerryhouse/immich-client-go], a Go client library for the (Immich API)[https://api.immich.app/introduction].
+terraform-provider-immich uses [immich-client-go](https://codeberg.org/pdwerryhouse/immich-client-go), a Go client library for the [Immich API](https://api.immich.app/introduction).
 
 ## Contributing code
 
