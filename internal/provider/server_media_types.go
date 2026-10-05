@@ -26,7 +26,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var (
@@ -55,9 +54,7 @@ func (d *serverMediaTypesDataSource) Metadata(_ context.Context, req datasource.
 func (d *serverMediaTypesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state serverMediaTypesDataSourceModel
 
-	tflog.Info(ctx, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 	serverMediaTypes, err := d.client.GetSupportedMediaTypes()
-	tflog.Info(ctx, fmt.Sprintf("+%v", serverMediaTypes))
 
 	if err != nil {
 		resp.Diagnostics.AddError(

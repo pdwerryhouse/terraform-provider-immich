@@ -165,6 +165,7 @@ func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewServerConfigDataSource,
 		NewServerFeaturesDataSource,
 		NewServerMediaTypesDataSource,
+		NewServerVersionDataSource,
 		NewServerStorageDataSource,
 		NewTagsDataSource,
 		NewViewFolderDataSource,
