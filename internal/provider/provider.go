@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"os"
+	"terraform-provider-immich/internal/datasources"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -161,6 +162,7 @@ func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewUsersDataSource,
 		NewPartnerDataSource,
 		NewPeopleDataSource,
+		datasources.NewPluginsDataSource,
 		NewServerAboutDataSource,
 		NewServerConfigDataSource,
 		NewServerFeaturesDataSource,

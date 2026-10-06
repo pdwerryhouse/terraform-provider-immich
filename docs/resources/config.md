@@ -789,7 +789,7 @@ Required:
 
 - `host` (String) Email server hostname.
 - `ignore_cert` (Boolean) Ignore TLS certificate validation errors (not recommended)
-- `password` (String) Password to use when authenticating with the email server.
+- `password` (String, Sensitive) Password to use when authenticating with the email server.
 - `port` (Number) Port of the email server (e.g 25, 465, or 587).
 - `secure` (Boolean) Use SMTPS (SMTP over TLS).
 - `username` (String) Username to use when authenticating with the email server.
@@ -808,7 +808,7 @@ Required:
 - `auto_register` (Boolean) Automatically register new users after signing in with OAuth.
 - `button_text` (String) Text on the login button.
 - `client_id` (String) Client Id
-- `client_secret` (String) Required for confidential client, or if PKCE (Proof Key for Code Exchange) is not supported for public client.
+- `client_secret` (String, Sensitive) Required for confidential client, or if PKCE (Proof Key for Code Exchange) is not supported for public client.
 - `default_storage_quota` (Number) Quota in GiB to be used when no claim is provided.
 - `enabled` (Boolean) Enable OAuth.
 - `end_session_endpoint` (String) Redirect the user to this URI when they log out.
