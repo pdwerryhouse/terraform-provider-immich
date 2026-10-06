@@ -999,6 +999,7 @@ func (d *configDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 									"password": schema.StringAttribute{
 										Description: "Password to use when authenticating with the email server.",
 										Computed:    true,
+										Sensitive:   true,
 									},
 									"port": schema.Int64Attribute{
 										Description: "Port of the email server (e.g 25, 465, or 587).",
@@ -1048,6 +1049,7 @@ func (d *configDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 					},
 					"client_secret": schema.StringAttribute{
 						Description: "Computed for confidential client, or if PKCE (Proof Key for Code Exchange) is not supported for public client.",
+						Sensitive:   true,
 						Computed:    true,
 					},
 					"default_storage_quota": schema.Int64Attribute{

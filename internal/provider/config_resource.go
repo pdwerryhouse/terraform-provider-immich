@@ -1042,6 +1042,7 @@ func (r *configResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 									"password": schema.StringAttribute{
 										Description: "Password to use when authenticating with the email server.",
 										Required:    true,
+										Sensitive:   true,
 									},
 									"port": schema.Int64Attribute{
 										Description: "Port of the email server (e.g 25, 465, or 587).",
@@ -1092,6 +1093,7 @@ func (r *configResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					"client_secret": schema.StringAttribute{
 						Description: "Required for confidential client, or if PKCE (Proof Key for Code Exchange) is not supported for public client.",
 						Required:    true,
+						Sensitive:   true,
 					},
 					"default_storage_quota": schema.Int64Attribute{
 						Description: "Quota in GiB to be used when no claim is provided.",
