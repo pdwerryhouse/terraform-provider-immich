@@ -63,6 +63,8 @@ The documentation is available at the [Terraform Registry](https://registry.terr
 
 ## Testing
 
+(Note, tests not working at the moment)
+
 To run tests, set the IMMICH_ENDPOINT and IMMICH_API_KEY environment variables:
 
 ```bash

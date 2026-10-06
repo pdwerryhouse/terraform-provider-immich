@@ -21,6 +21,7 @@ import (
 	"context"
 	"os"
 	"terraform-provider-immich/internal/datasources"
+	"terraform-provider-immich/internal/resources"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -152,44 +153,44 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 
 func (p *immichProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewActivitiesDataSource,
-		NewAlbumsDataSource,
-		NewApiKeysDataSource,
-		NewAssetStatisticsDataSource,
-		NewConfigDataSource,
-		NewFacesDataSource,
-		NewLibrariesDataSource,
-		NewUsersDataSource,
-		NewPartnerDataSource,
-		NewPeopleDataSource,
+		datasources.NewActivitiesDataSource,
+		datasources.NewAlbumsDataSource,
+		datasources.NewApiKeysDataSource,
+		datasources.NewAssetStatisticsDataSource,
+		datasources.NewConfigDataSource,
+		datasources.NewFacesDataSource,
+		datasources.NewLibrariesDataSource,
+		datasources.NewUsersDataSource,
+		datasources.NewPartnerDataSource,
+		datasources.NewPeopleDataSource,
 		datasources.NewPluginsDataSource,
-		NewServerAboutDataSource,
-		NewServerConfigDataSource,
-		NewServerFeaturesDataSource,
-		NewServerMediaTypesDataSource,
-		NewServerStorageDataSource,
-		NewServerStatisticsDataSource,
-		NewServerVersionDataSource,
-		NewTagsDataSource,
-		NewViewFolderDataSource,
-		NewViewFolderUniquePathsDataSource,
+		datasources.NewServerAboutDataSource,
+		datasources.NewServerConfigDataSource,
+		datasources.NewServerFeaturesDataSource,
+		datasources.NewServerMediaTypesDataSource,
+		datasources.NewServerStorageDataSource,
+		datasources.NewServerStatisticsDataSource,
+		datasources.NewServerVersionDataSource,
+		datasources.NewTagsDataSource,
+		datasources.NewViewFolderDataSource,
+		datasources.NewViewFolderUniquePathsDataSource,
 	}
 }
 
 func (p *immichProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewActivityResource,
-		NewAlbumResource,
-		NewAssetResource,
-		NewConfigResource,
+		resources.NewActivityResource,
+		resources.NewAlbumResource,
+		resources.NewAssetResource,
+		resources.NewConfigResource,
 		//NewAlbumActivityResource,
 		//NewAlbumOrderResource,
-		NewApiKeyResource,
-		NewFaceResource,
-		NewLibraryResource,
-		NewPartnerResource,
-		NewPersonResource,
-		NewUserResource,
-		NewTagResource,
+		resources.NewApiKeyResource,
+		resources.NewFaceResource,
+		resources.NewLibraryResource,
+		resources.NewPartnerResource,
+		resources.NewPersonResource,
+		resources.NewUserResource,
+		resources.NewTagResource,
 	}
 }
