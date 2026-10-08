@@ -89,7 +89,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		resp.Diagnostics.AddAttributeError(
 			path.Root("host"),
 			"Unknown Immich host",
-			"The Immich host is unknown 1",
+			"The Immich host is unknown.",
 		)
 	}
 
@@ -97,7 +97,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		resp.Diagnostics.AddAttributeError(
 			path.Root("apikey"),
 			"Unknown Immich apikey",
-			"The Immich apikey is unknown 1",
+			"The Immich apikey is unknown.",
 		)
 	}
 
@@ -121,7 +121,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		resp.Diagnostics.AddAttributeError(
 			path.Root("endpoint"),
 			"Unknown Immich endpoint",
-			"The Immich endpoint is unknown 2",
+			"The Immich endpoint is unknown.",
 		)
 	}
 
@@ -129,7 +129,7 @@ func (p *immichProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		resp.Diagnostics.AddAttributeError(
 			path.Root("apikey"),
 			"Unknown Immich apikey",
-			"The Immich apikey is unknown 2",
+			"The Immich apikey is unknown.",
 		)
 	}
 
