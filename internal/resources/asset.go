@@ -59,24 +59,30 @@ func (r *assetResource) Metadata(_ context.Context, req resource.MetadataRequest
 
 func (r *assetResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Create an Immich asset (image or video).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed: true,
+				Description: "The asset ID.",
+				Computed:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"filename": schema.StringAttribute{
-				Required: true,
+				Description: "Filename as will be stored in the server. Has no bearing on local filename from which data is read.",
+				Required:    true,
 			},
 			"asset_data": schema.StringAttribute{
-				Required: true,
+				Description: "Image data in base64 format.",
+				Required:    true,
 			},
 			"created_at": schema.StringAttribute{
-				Required: true,
+				Description: "Creation date/time in ISO8601 format.",
+				Required:    true,
 			},
 			"modified_at": schema.StringAttribute{
-				Required: true,
+				Description: "Last modification date/time in ISO8601 format.",
+				Required:    true,
 			},
 		},
 	}
