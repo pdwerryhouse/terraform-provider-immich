@@ -20,11 +20,14 @@ package datasources
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	immichclient "codeberg.org/pdwerryhouse/immich-client-go/client"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -56,6 +59,12 @@ func (d *assetStatisticsDataSource) Metadata(_ context.Context, req datasource.M
 
 func (d *assetStatisticsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var state assetStatisticsDataSourceModel
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &state)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	var isFavorite, isTrashed *bool
 
@@ -116,24 +125,37 @@ func (d *assetStatisticsDataSource) Configure(_ context.Context, req datasource.
 
 func (d *assetStatisticsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: "Get statistics about Immich assets",
 		Attributes: map[string]schema.Attribute{
 			"is_favorite": schema.BoolAttribute{
-				Optional: true,
+				Description: "If true, show only assets that have been marked as favourites.",
+				Optional:    true,
 			},
 			"is_trashed": schema.BoolAttribute{
-				Optional: true,
+				Description: "If true, show only assets that have been put in the bin.",
+				Optional:    true,
 			},
 			"visibility": schema.StringAttribute{
-				Optional: true,
+				Description: "Filter by visibility state. Options are 'archive', 'timeline', 'hidden' or 'locked'.",
+				Optional:    true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(
+						regexp.MustCompile(`^(archive|timeline|hidden|locked)?$`),
+						"must be 'archive', 'timeline', 'hidden', 'locked' or empty",
+					),
+				},
 			},
 			"images": schema.Int64Attribute{
-				Computed: true,
+				Description: "Number of image assets.",
+				Computed:    true,
 			},
 			"total": schema.Int64Attribute{
-				Computed: true,
+				Description: "Total number of assets.",
+				Computed:    true,
 			},
 			"videos": schema.Int64Attribute{
-				Computed: true,
+				Description: "Number of video assets.",
+				Computed:    true,
 			},
 		},
 	}
